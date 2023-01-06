@@ -107,7 +107,7 @@ struct {
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_IO,
 		},
-		/* clock (permissive) */ {
+		/* clock & RTC (permissive) */ {
 			.phys_start = 0x01c20000,
 			.virt_start = 0x01c20000,
 			.size =            0x800,
@@ -129,27 +129,27 @@ struct {
 				JAILHOUSE_MEM_IO | JAILHOUSE_MEM_IO_32,
 		},
 		/* watchdog */ {
-			.phys_start = 0x01c20ca0,
-			.virt_start = 0x01c20ca0,
-			.size =             0x20,
+			.phys_start = 0x01c20c90,
+			.virt_start = 0x01c20c90,
+			.size =             0x10,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_IO | JAILHOUSE_MEM_IO_32,
 		},
 		/* MMIO 2 (permissive) */ {
+			.phys_start = 0x01c21000,
+			.virt_start = 0x01c21000,
+			.size =           0x4000,
+			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
+				JAILHOUSE_MEM_IO | JAILHOUSE_MEM_IO_32,
+		},
+		/* MMIO 3 (permissive) */ {
 			.phys_start = 0x01c28000,
 			.virt_start = 0x01c28000,
 			.size =           0x9000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_IO,
 		},
-		/* RTC */ {
-			.phys_start = 0x01f00000,
-			.virt_start = 0x01f00000,
-			.size =            0x400,
-			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
-				JAILHOUSE_MEM_IO | JAILHOUSE_MEM_IO_32,
-		},
-		/* MMIO 3 (permissive) */ {
+		/* MMIO 4 (permissive) */ {
 			.phys_start = 0x01f01000,
 			.virt_start = 0x01f01000,
 			.size =           0x3000,
