@@ -51,7 +51,7 @@ struct {
 			},
 		},
 		.root_cell = {
-			.name = "Dragonresource-T3",
+			.name = "dragonresource-t3",
 
 			.cpu_set_size = sizeof(config.cpus),
 			.num_memory_regions = ARRAY_SIZE(config.mem_regions),
