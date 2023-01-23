@@ -27,7 +27,7 @@ struct {
 		.revision = JAILHOUSE_CONFIG_REVISION,
 		.flags = JAILHOUSE_SYS_VIRTUAL_DEBUG_CONSOLE,
 		.hypervisor_memory = {
-			.phys_start = 0x4f800000,
+			.phys_start = 0x6f800000,
 			.size = 0x800000 - 0x100000, /* -1MB (PSCI) */
 		},
 		.debug_console = {
@@ -69,37 +69,37 @@ struct {
 	.mem_regions = {
 		/* IVSHMEM shared memory regions (demo) */
 		{
-			.phys_start = 0x4f6f0000,
-			.virt_start = 0x4f6f0000,
+			.phys_start = 0x6f6f0000,
+			.virt_start = 0x6f6f0000,
 			.size = 0x1000,
 			.flags = JAILHOUSE_MEM_READ,
 		},
 		{
-			.phys_start = 0x4f6f1000,
-			.virt_start = 0x4f6f1000,
+			.phys_start = 0x6f6f1000,
+			.virt_start = 0x6f6f1000,
 			.size = 0x9000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE,
 		},
 		{
-			.phys_start = 0x4f6fa000,
-			.virt_start = 0x4f6fa000,
+			.phys_start = 0x6f6fa000,
+			.virt_start = 0x6f6fa000,
 			.size = 0x2000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE,
 		},
 		{
-			.phys_start = 0x4f6fc000,
-			.virt_start = 0x4f6fc000,
+			.phys_start = 0x6f6fc000,
+			.virt_start = 0x6f6fc000,
 			.size = 0x2000,
 			.flags = JAILHOUSE_MEM_READ,
 		},
 		{
-			.phys_start = 0x4f6fe000,
-			.virt_start = 0x4f6fe000,
+			.phys_start = 0x6f6fe000,
+			.virt_start = 0x6f6fe000,
 			.size = 0x2000,
 			.flags = JAILHOUSE_MEM_READ,
 		},
 		/* IVSHMEM shared memory region */
-		JAILHOUSE_SHMEM_NET_REGIONS(0x4f700000, 0),
+		JAILHOUSE_SHMEM_NET_REGIONS(0x6f700000, 0),
 		/* MMIO 1 (permissive) */ {
 			.phys_start = 0x01c00000,
 			.virt_start = 0x01c00000,
@@ -159,7 +159,7 @@ struct {
 		/* RAM */ {
 			.phys_start = 0x40000000,
 			.virt_start = 0x40000000,
-			.size =       0x3f620000,
+			.size =       0x2f620000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_EXECUTE,
 		},
