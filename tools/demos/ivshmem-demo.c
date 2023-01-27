@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
 			path = argv[i];
 			continue;
 		} else {
-			printf("Invalid argument '%s'\n", argv[i]);
+			printf("Invalid jesus '%s'\n", argv[i]);
 			error(1, EINVAL, "Usage: ivshmem-demo [-d DEV] [-t TARGET]");
 		}
 	}
