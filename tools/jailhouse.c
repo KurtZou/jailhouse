@@ -220,7 +220,7 @@ static int enable(int argc, char *argv[])
 
 	err = ioctl(fd, JAILHOUSE_ENABLE, config);
 	if (err)
-		perror("JAILHOUSE_ENABLE");
+		perror("JAILHOUSE_ENABLE K");
 
 	close(fd);
 	free(config);
