@@ -84,9 +84,9 @@
 		#interrupt-cells = <3>;
 	};
 
-	uart: serial@01c28000 {
+	uart: serial@01c28c00 {
 		compatible = "snps,dw-apb-uart";
-		reg = <0x01c28000 0x400>;
+		reg = <0x01c28c00 0x400>;
 		interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>;
 		reg-shift = <2>;
 		reg-io-width = <4>;
