@@ -32,7 +32,7 @@ struct {
 		},
 		.debug_console = {
 			.address = 0x01c28000,
-			.size = 0x400,
+			.size = 0x1000,
 			.type = JAILHOUSE_CON_TYPE_8250,
 			.flags = JAILHOUSE_CON_ACCESS_MMIO |
 				 JAILHOUSE_CON_REGDIST_4,
@@ -145,14 +145,14 @@ struct {
 		/* MMIO 3 (permissive) */ {
 			.phys_start = 0x01c28000,
 			.virt_start = 0x01c28000,
-			.size =           0x400,
+			.size =           0x1000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_IO,
 		},
 		/* MMIO 3 (permissive) */ {
-			.phys_start = 0x01c29000,
-			.virt_start = 0x01c29000,
-			.size =           0x8000,
+			.phys_start = 0x01c2a000,
+			.virt_start = 0x01c2a000,
+			.size =           0x7000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_IO,
 		},
