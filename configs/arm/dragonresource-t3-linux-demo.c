@@ -37,9 +37,9 @@ struct {
 		.vpci_irq_base = 123,
 
 		.console = {
-			.address = 0x01c28c00,
+			.address = 0x01c29000,
 			.clock_reg = 0x01c2006c,
-			.gate_nr = 19,
+			.gate_nr = 20,
 			.divider = 0x0d,
 			.type = JAILHOUSE_CON_TYPE_8250,
 			.flags = JAILHOUSE_CON_ACCESS_MMIO |
@@ -59,9 +59,9 @@ struct {
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_IO | JAILHOUSE_MEM_IO_32,
 		},
-		/* UART 3 */ {
-			.phys_start = 0x01c28c00,
-			.virt_start = 0x01c28c00,
+		/* UART 4 */ {
+			.phys_start = 0x01c29000,
+			.virt_start = 0x01c29000,
 			.size = 0x400,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_IO | JAILHOUSE_MEM_IO_32,
