@@ -19,7 +19,7 @@ void inmate_main(void)
 	 * The cell config can set up a mapping to access UARTx instead of UART0
 	 */
 	while(++i) {
-		for (j = 0; j < 100000000; j++);
+		for (j = 0; j < 100; j++);
 		printk("Hello %d from cell!\n", i);
 	}
 

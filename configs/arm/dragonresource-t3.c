@@ -18,7 +18,7 @@
 struct {
 	struct jailhouse_system header;
 	__u64 cpus[1];
-	struct jailhouse_memory mem_regions[18];
+	struct jailhouse_memory mem_regions[20];
 	struct jailhouse_irqchip irqchips[1];
 	struct jailhouse_pci_device pci_devices[2];
 } __attribute__((packed)) config = {
@@ -107,10 +107,17 @@ struct {
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_IO,
 		},
-		/* clock & RTC (permissive) */ {
+		/* CCU */ {
 			.phys_start = 0x01c20000,
 			.virt_start = 0x01c20000,
-			.size =            0x800,
+			.size = 0x400,
+			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
+				JAILHOUSE_MEM_IO | JAILHOUSE_MEM_IO_32,
+		},
+		/* Ints */ {
+			.phys_start = 0x01c20400,
+			.virt_start = 0x01c20400,
+			.size = 0x400,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_IO | JAILHOUSE_MEM_IO_32,
 		},
@@ -145,7 +152,14 @@ struct {
 		/* MMIO 3 (permissive) */ {
 			.phys_start = 0x01c28000,
 			.virt_start = 0x01c28000,
-			.size =           0x9000,
+			.size =           0x1000,
+			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
+				JAILHOUSE_MEM_IO,
+		},
+		/* MMIO 3 (permissive) */ {
+			.phys_start = 0x01c2a000,
+			.virt_start = 0x01c2a000,
+			.size =           0x7000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_IO,
 		},

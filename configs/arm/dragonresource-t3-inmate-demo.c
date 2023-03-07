@@ -19,7 +19,7 @@
 struct {
 	struct jailhouse_cell_desc cell;
 	__u64 cpus[1];
-	struct jailhouse_memory mem_regions[9];
+	struct jailhouse_memory mem_regions[10];
 	struct jailhouse_irqchip irqchips[1];
 	struct jailhouse_pci_device pci_devices[1];
 } __attribute__((packed)) config = {
@@ -37,7 +37,12 @@ struct {
 		.vpci_irq_base = 125,
 
 		.console = {
-			.address = 0x01c28000,
+			.address = 0x01c29000,
+#if 1
+			.clock_reg = 0x01c2006c,
+			.gate_nr = 20,
+			.divider = 0x0d,
+#endif
 			.type = JAILHOUSE_CON_TYPE_8250,
 			.flags = JAILHOUSE_CON_ACCESS_MMIO |
 				 JAILHOUSE_CON_REGDIST_4,
@@ -49,6 +54,15 @@ struct {
 	},
 
 	.mem_regions = {
+#if 1
+		/* CCU */ {
+			.phys_start = 0x01c20000,
+			.virt_start = 0x01c20000,
+			.size = 0x400,
+			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
+				JAILHOUSE_MEM_IO | JAILHOUSE_MEM_IO_32 | JAILHOUSE_MEM_ROOTSHARED,
+		},
+#endif
 		/* IVSHMEM shared memory regions (demo) */
 		{
 			.phys_start = 0x6f6f0000,
@@ -89,12 +103,21 @@ struct {
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_IO | JAILHOUSE_MEM_IO_32,
 		},
+#if 0		
 		/* UART 0-3 */ {
 			.phys_start = 0x01c28000,
 			.virt_start = 0x01c28000,
 			.size = 0x1000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_IO | JAILHOUSE_MEM_ROOTSHARED,
+		},
+#endif
+		/* UART 4 */ {
+			.phys_start = 0x01c29000,
+			.virt_start = 0x01c29000,
+			.size = 0x1000,
+			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
+				JAILHOUSE_MEM_IO ,
 		},
 		/* RAM */ {
 			.phys_start = 0x6f600000,
