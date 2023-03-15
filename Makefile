@@ -52,7 +52,10 @@ firmware_install: $(DESTDIR)$(firmwaredir) modules
 tool_inmates_install: $(DESTDIR)$(libexecdir)/jailhouse
 	$(INSTALL_DATA) inmates/tools/$(ARCH)/*.bin $<
 
-install: modules_install firmware_install tool_inmates_install
+freertos_install: $(DESTDIR)$(libexecdir)/jailhouse
+	$(INSTALL_DATA) freertos/$(ARCH)/*.bin $<
+	
+install: modules_install firmware_install tool_inmates_install freertos_install
 	$(Q)$(MAKE) -C tools $@ src=.
 ifeq ($(strip $(PYTHON_PIP_USABLE)), yes)
 	$(PIP) install --upgrade --force-reinstall $(PIP_ROOT) .

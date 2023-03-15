@@ -46,6 +46,11 @@
 		};
 	};
 
+	memory@0 {
+		device_type = "memory";
+		reg = <0x68000000 0x5600000>;
+	};
+
 	psci {
 		compatible = "arm,psci-0.2";
 		method = "smc";
@@ -74,6 +79,15 @@
 			clock-frequency = <24000000>;
 			clock-output-names = "osc24M";
 		};
+
+	    apb2_gates: clk@1c2006c {
+	        #clock-cells = <1>;
+    		compatible = "allwinner,sun8i-a23-apb2-gates-clk";
+    		reg = <0x01c2006c 0x4>;
+    		clocks = <&osc24M>;
+    		clock-indices = <20>;
+    		clock-output-names = "apb2_uart4";
+        };
 	};
 
 	gic: interrupt-controller@01c81000 {
@@ -84,13 +98,15 @@
 		#interrupt-cells = <3>;
 	};
 
-	uart: serial@01c28000 {
+
+	uart: serial@1c29000 {
 		compatible = "snps,dw-apb-uart";
-		reg = <0x01c28000 0x400>;
-		interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>;
+		reg = <0x01c29000 0x400>;
+		interrupts = <GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>;
 		reg-shift = <2>;
 		reg-io-width = <4>;
 		clock-frequency = <24000000>;
+		clocks = <&apb2_gates 20>;
 	};
 
 	pci@2000000 {

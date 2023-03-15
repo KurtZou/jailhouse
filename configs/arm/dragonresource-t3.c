@@ -33,6 +33,8 @@ struct {
 		.debug_console = {
 			.address = 0x01c28000,
 			.size = 0x1000,
+            .clock_reg = 0x01c2006c,
+            .gate_nr = 16,
 			.type = JAILHOUSE_CON_TYPE_8250,
 			.flags = JAILHOUSE_CON_ACCESS_MMIO |
 				 JAILHOUSE_CON_REGDIST_4,
@@ -173,7 +175,7 @@ struct {
 		/* RAM */ {
 			.phys_start = 0x40000000,
 			.virt_start = 0x40000000,
-			.size =       0x2f620000,
+			.size =       0x2f600000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_EXECUTE,
 		},
