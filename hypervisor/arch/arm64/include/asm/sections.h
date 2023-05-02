@@ -18,19 +18,19 @@
  * firmware and the UART as well as identity mapping for the trampoline code
  * page.
  */
-#define ARCH_SECTIONS							\
-	. = ALIGN(PAGE_SIZE);						\
-	.bootstrap_page_tables : {					\
-		bootstrap_pt_l0 = .;					\
-		. = . + PAGE_SIZE;					\
-		bootstrap_pt_l1_hyp_uart = .;				\
-		. = . + PAGE_SIZE;					\
-		bootstrap_pt_l1_trampoline = .;				\
-		. = . + PAGE_SIZE;					\
-		bootstrap_pt_l2_hyp_uart = .;				\
-		. = . + PAGE_SIZE;					\
-	}								\
-	.trampoline : {							\
-		__trampoline_start = .;					\
-		*(.trampoline)						\
-	}
+#define ARCH_SECTIONS                           \
+    . = ALIGN(PAGE_SIZE);                       \
+    .bootstrap_page_tables : {                  \
+        bootstrap_pt_l0 = .;                    \
+        . = . + PAGE_SIZE;                  \
+        bootstrap_pt_l1_hyp_uart = .;               \
+        . = . + PAGE_SIZE;                  \
+        bootstrap_pt_l1_trampoline = .;             \
+        . = . + PAGE_SIZE;                  \
+        bootstrap_pt_l2_hyp_uart = .;               \
+        . = . + PAGE_SIZE;                  \
+    }                               \
+    .trampoline : {                         \
+        __trampoline_start = .;                 \
+        *(.trampoline)                      \
+    }

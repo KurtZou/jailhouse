@@ -21,21 +21,23 @@
 #include <asm/processor.h>
 
 #define X86_CR0_HOST_STATE \
-	(X86_CR0_PG | X86_CR0_WP | X86_CR0_NE | X86_CR0_ET | X86_CR0_TS | \
-	 X86_CR0_MP | X86_CR0_PE)
-#define X86_CR4_HOST_STATE	X86_CR4_PAE
+    (X86_CR0_PG | X86_CR0_WP | X86_CR0_NE | X86_CR0_ET | X86_CR0_TS | \
+     X86_CR0_MP | X86_CR0_PE)
+#define X86_CR4_HOST_STATE  X86_CR4_PAE
 
-struct vcpu_io_intercept {
-	u16 port;
-	unsigned int size;
-	bool in;
-	unsigned int inst_len;
-	bool rep_or_str;
+struct vcpu_io_intercept
+{
+    u16 port;
+    unsigned int size;
+    bool in;
+    unsigned int inst_len;
+    bool rep_or_str;
 };
 
-struct vcpu_mmio_intercept {
-	u64 phys_addr;
-	bool is_write;
+struct vcpu_mmio_intercept
+{
+    u64 phys_addr;
+    bool is_write;
 };
 
 int vcpu_early_init(void);
@@ -46,9 +48,9 @@ int vcpu_cell_init(struct cell *cell);
 int vcpu_vendor_cell_init(struct cell *cell);
 
 int vcpu_map_memory_region(struct cell *cell,
-			   const struct jailhouse_memory *mem);
+                           const struct jailhouse_memory *mem);
 int vcpu_unmap_memory_region(struct cell *cell,
-			     const struct jailhouse_memory *mem);
+                             const struct jailhouse_memory *mem);
 void vcpu_cell_exit(struct cell *cell);
 void vcpu_vendor_cell_exit(struct cell *cell);
 
@@ -76,18 +78,18 @@ void vcpu_tlb_flush(void);
  */
 
 const u8 *vcpu_map_inst(const struct guest_paging_structures *pg_structs,
-			unsigned long pc, unsigned int *size);
+                        unsigned long pc, unsigned int *size);
 
 const u8 *vcpu_get_inst_bytes(const struct guest_paging_structures *pg_structs,
-			      unsigned long pc, unsigned int *size);
+                              unsigned long pc, unsigned int *size);
 
 void vcpu_skip_emulated_instruction(unsigned int inst_len);
 
 unsigned int vcpu_vendor_get_io_bitmap_pages(void);
 
-#define VCPU_CS_DPL_MASK	BIT_MASK(6, 5)
-#define VCPU_CS_L		(1 << 13)
-#define VCPU_CS_DB		(1 << 14)
+#define VCPU_CS_DPL_MASK    BIT_MASK(6, 5)
+#define VCPU_CS_L       (1 << 13)
+#define VCPU_CS_DB      (1 << 14)
 
 u64 vcpu_vendor_get_efer(void);
 u64 vcpu_vendor_get_rflags(void);

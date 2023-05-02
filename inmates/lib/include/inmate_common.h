@@ -37,39 +37,39 @@
  */
 
 #ifndef CONFIG_INMATE_BASE
-#define CONFIG_INMATE_BASE	0x0
+#define CONFIG_INMATE_BASE  0x0
 #endif
 
-#define NULL			((void *)0)
+#define NULL            ((void *)0)
 
-#define NS_PER_USEC		1000ULL
-#define NS_PER_MSEC		1000000ULL
-#define NS_PER_SEC		1000000000ULL
+#define NS_PER_USEC     1000ULL
+#define NS_PER_MSEC     1000000ULL
+#define NS_PER_SEC      1000000000ULL
 
-#define PCI_CFG_VENDOR_ID	0x000
-#define PCI_CFG_DEVICE_ID	0x002
-#define PCI_CFG_COMMAND		0x004
-# define PCI_CMD_IO		(1 << 0)
-# define PCI_CMD_MEM		(1 << 1)
-# define PCI_CMD_MASTER		(1 << 2)
-# define PCI_CMD_INTX_OFF	(1 << 10)
-#define PCI_CFG_STATUS		0x006
-# define PCI_STS_INT		(1 << 3)
-# define PCI_STS_CAPS		(1 << 4)
-#define PCI_CFG_BAR		0x010
-# define PCI_BAR_64BIT		0x4
-#define PCI_CFG_CAP_PTR		0x034
+#define PCI_CFG_VENDOR_ID   0x000
+#define PCI_CFG_DEVICE_ID   0x002
+#define PCI_CFG_COMMAND     0x004
+# define PCI_CMD_IO     (1 << 0)
+# define PCI_CMD_MEM        (1 << 1)
+# define PCI_CMD_MASTER     (1 << 2)
+# define PCI_CMD_INTX_OFF   (1 << 10)
+#define PCI_CFG_STATUS      0x006
+# define PCI_STS_INT        (1 << 3)
+# define PCI_STS_CAPS       (1 << 4)
+#define PCI_CFG_BAR     0x010
+# define PCI_BAR_64BIT      0x4
+#define PCI_CFG_CAP_PTR     0x034
 
-#define PCI_ID_ANY		0xffff
+#define PCI_ID_ANY      0xffff
 
-#define PCI_DEV_CLASS_OTHER	0xff
+#define PCI_DEV_CLASS_OTHER 0xff
 
-#define PCI_CAP_MSI		0x05
-#define PCI_CAP_VENDOR		0x09
-#define PCI_CAP_MSIX		0x11
+#define PCI_CAP_MSI     0x05
+#define PCI_CAP_VENDOR      0x09
+#define PCI_CAP_MSIX        0x11
 
-#define MSIX_CTRL_ENABLE	0x8000
-#define MSIX_CTRL_FMASK		0x4000
+#define MSIX_CTRL_ENABLE    0x8000
+#define MSIX_CTRL_FMASK     0x4000
 
 #ifndef __ASSEMBLY__
 typedef s8 __s8;
@@ -88,12 +88,12 @@ typedef enum { true = 1, false = 0 } bool;
 
 #include <jailhouse/hypercall.h>
 
-#define comm_region	((struct jailhouse_comm_region *)COMM_REGION_BASE)
+#define comm_region ((struct jailhouse_comm_region *)COMM_REGION_BASE)
 
 static inline void __attribute__((noreturn)) stop(void)
 {
-	disable_irqs();
-	halt();
+    disable_irqs();
+    halt();
 }
 
 void arch_init_early(void);
@@ -114,8 +114,8 @@ int strcmp(const char *s1, const char *s2);
 int strncasecmp(const char *s1, const char *s2, unsigned long n);
 
 const char *cmdline_parse_str(const char *param, char *value_buffer,
-			      unsigned long buffer_size,
-			      const char *default_value);
+                              unsigned long buffer_size,
+                              const char *default_value);
 long long cmdline_parse_int(const char *param, long long default_value);
 bool cmdline_parse_bool(const char *param, bool default_value);
 
@@ -131,7 +131,7 @@ void irq_enable(unsigned int irq);
 void pci_init(void);
 u32 pci_read_config(u16 bdf, unsigned int addr, unsigned int size);
 void pci_write_config(u16 bdf, unsigned int addr, u32 value,
-		      unsigned int size);
+                      unsigned int size);
 int pci_find_device(u16 vendor, u16 device, u16 start_bdf);
 int pci_find_cap(u16 bdf, u16 cap);
 void pci_msi_set_vector(u16 bdf, unsigned int vector);
@@ -140,7 +140,7 @@ void pci_msix_set_vector(u16 bdf, unsigned int vector, u32 index);
 void delay_us(unsigned long microsecs);
 
 #define CMDLINE_BUFFER(size) \
-	const char cmdline[size] __attribute__((section(".cmdline")))
+    const char cmdline[size] __attribute__((section(".cmdline")))
 
 extern const char cmdline[];
 extern const char stack_top[];

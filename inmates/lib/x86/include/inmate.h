@@ -39,29 +39,29 @@
 #ifndef _JAILHOUSE_INMATE_H
 #define _JAILHOUSE_INMATE_H
 
-#define COMM_REGION_BASE	0x100000
+#define COMM_REGION_BASE    0x100000
 
-#define INMATE_CS32		0x8
-#define INMATE_CS64		0x10
-#define INMATE_DS32		0x18
+#define INMATE_CS32     0x8
+#define INMATE_CS64     0x10
+#define INMATE_DS32     0x18
 
-#define PAGE_SIZE		(4 * 1024ULL)
+#define PAGE_SIZE       (4 * 1024ULL)
 #ifdef __x86_64__
-#define BITS_PER_LONG		64
-#define HUGE_PAGE_SIZE		(2 * 1024 * 1024ULL)
+#define BITS_PER_LONG       64
+#define HUGE_PAGE_SIZE      (2 * 1024 * 1024ULL)
 #else
-#define BITS_PER_LONG		32
-#define HUGE_PAGE_SIZE		(4 * 1024 * 1024ULL)
+#define BITS_PER_LONG       32
+#define HUGE_PAGE_SIZE      (4 * 1024 * 1024ULL)
 #endif
-#define PAGE_MASK		(~(PAGE_SIZE - 1))
-#define HUGE_PAGE_MASK		(~(HUGE_PAGE_SIZE - 1))
+#define PAGE_MASK       (~(PAGE_SIZE - 1))
+#define HUGE_PAGE_MASK      (~(HUGE_PAGE_SIZE - 1))
 
-#define X2APIC_ID		0x802
-#define X2APIC_ICR		0x830
+#define X2APIC_ID       0x802
+#define X2APIC_ICR      0x830
 
-#define APIC_LVL_ASSERT		(1 << 14)
+#define APIC_LVL_ASSERT     (1 << 14)
 
-#define SMP_MAX_CPUS		255
+#define SMP_MAX_CPUS        255
 
 #ifndef __ASSEMBLY__
 typedef signed char s8;
@@ -78,128 +78,128 @@ typedef unsigned long long u64;
 
 static inline void enable_irqs(void)
 {
-	asm volatile("sti");
+    asm volatile("sti");
 }
 
 static inline void disable_irqs(void)
 {
-	asm volatile("cli");
+    asm volatile("cli");
 }
 
 static inline void cpu_relax(void)
 {
-	asm volatile("rep; nop" : : : "memory");
+    asm volatile("rep; nop" : : : "memory");
 }
 
 static inline void __attribute__((noreturn)) halt(void)
 {
-	while (1)
-		asm volatile ("hlt" : : : "memory");
+    while (1)
+        asm volatile ("hlt" : : : "memory");
 }
 
 static inline void outb(u8 v, u16 port)
 {
-	asm volatile("outb %0,%1" : : "a" (v), "dN" (port));
+    asm volatile("outb %0,%1" : : "a" (v), "dN" (port));
 }
 
 static inline void outw(u16 v, u16 port)
 {
-	asm volatile("outw %0,%1" : : "a" (v), "dN" (port));
+    asm volatile("outw %0,%1" : : "a" (v), "dN" (port));
 }
 
 static inline void outl(u32 v, u16 port)
 {
-	asm volatile("outl %0,%1" : : "a" (v), "dN" (port));
+    asm volatile("outl %0,%1" : : "a" (v), "dN" (port));
 }
 
 static inline u8 inb(u16 port)
 {
-	u8 v;
-	asm volatile("inb %1,%0" : "=a" (v) : "dN" (port));
-	return v;
+    u8 v;
+    asm volatile("inb %1,%0" : "=a" (v) : "dN" (port));
+    return v;
 }
 
 static inline u16 inw(u16 port)
 {
-	u16 v;
-	asm volatile("inw %1,%0" : "=a" (v) : "dN" (port));
-	return v;
+    u16 v;
+    asm volatile("inw %1,%0" : "=a" (v) : "dN" (port));
+    return v;
 }
 
 static inline u32 inl(u16 port)
 {
-	u32 v;
-	asm volatile("inl %1,%0" : "=a" (v) : "dN" (port));
-	return v;
+    u32 v;
+    asm volatile("inl %1,%0" : "=a" (v) : "dN" (port));
+    return v;
 }
 
 static inline u8 mmio_read8(void *address)
 {
-	return *(volatile u8 *)address;
+    return *(volatile u8 *)address;
 }
 
 static inline u16 mmio_read16(void *address)
 {
-	return *(volatile u16 *)address;
+    return *(volatile u16 *)address;
 }
 
 static inline u32 mmio_read32(void *address)
 {
-	u32 value;
+    u32 value;
 
-	/* assembly-encoded to match the hypervisor MMIO parser support */
-	asm volatile("movl (%1),%0" : "=r" (value) : "r" (address));
-	return value;
+    /* assembly-encoded to match the hypervisor MMIO parser support */
+    asm volatile("movl (%1),%0" : "=r" (value) : "r" (address));
+    return value;
 }
 
 static inline u64 mmio_read64(void *address)
 {
-	return *(volatile u64 *)address;
+    return *(volatile u64 *)address;
 }
 
 static inline void mmio_write8(void *address, u8 value)
 {
-	*(volatile u8 *)address = value;
+    *(volatile u8 *)address = value;
 }
 
 static inline void mmio_write16(void *address, u16 value)
 {
-	*(volatile u16 *)address = value;
+    *(volatile u16 *)address = value;
 }
 
 static inline void mmio_write32(void *address, u32 value)
 {
-	/* assembly-encoded to match the hypervisor MMIO parser support */
-	asm volatile("movl %0,(%1)" : : "r" (value), "r" (address));
+    /* assembly-encoded to match the hypervisor MMIO parser support */
+    asm volatile("movl %0,(%1)" : : "r" (value), "r" (address));
 }
 
 static inline void mmio_write64(void *address, u64 value)
 {
-	*(volatile u64 *)address = value;
+    *(volatile u64 *)address = value;
 }
 
 static inline u64 read_msr(unsigned int msr)
 {
-	u32 low, high;
+    u32 low, high;
 
-	asm volatile("rdmsr" : "=a" (low), "=d" (high) : "c" (msr));
-	return low | ((u64)high << 32);
+    asm volatile("rdmsr" : "=a" (low), "=d" (high) : "c" (msr));
+    return low | ((u64)high << 32);
 }
 
 static inline void write_msr(unsigned int msr, u64 val)
 {
-	asm volatile("wrmsr"
-		: /* no output */
-		: "c" (msr), "a" ((u32)val), "d" ((u32)(val >> 32))
-		: "memory");
+    asm volatile("wrmsr"
+                 : /* no output */
+                 : "c" (msr), "a" ((u32)val), "d" ((u32)(val >> 32))
+                 : "memory");
 }
 
 static inline unsigned int cpu_id(void)
 {
-	return read_msr(X2APIC_ID);
+    return read_msr(X2APIC_ID);
 }
 
-#define MAX_INTERRUPT_VECTORS	32
+#define MAX_INTERRUPT_VECTORS   32
 
 extern unsigned long idt[];
 extern void *stack;
@@ -208,16 +208,17 @@ void excp_reporting_init(void);
 
 void irq_send_ipi(unsigned int cpu_id, unsigned int vector);
 
-enum ioapic_trigger_mode {
-	TRIGGER_EDGE = 0,
-	TRIGGER_LEVEL_ACTIVE_HIGH = 1 << 15,
-	TRIGGER_LEVEL_ACTIVE_LOW = (1 << 15) | (1 << 13),
+enum ioapic_trigger_mode
+{
+    TRIGGER_EDGE = 0,
+    TRIGGER_LEVEL_ACTIVE_HIGH = 1 << 15,
+    TRIGGER_LEVEL_ACTIVE_LOW = (1 << 15) | (1 << 13),
 };
 
 void ioapic_init(void);
 void ioapic_pin_set_vector(unsigned int pin,
-			   enum ioapic_trigger_mode trigger_mode,
-			   unsigned int vector);
+                           enum ioapic_trigger_mode trigger_mode,
+                           unsigned int vector);
 
 unsigned long long pm_timer_read(void);
 

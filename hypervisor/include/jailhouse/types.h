@@ -15,20 +15,21 @@
 
 #include <asm/types.h>
 
-#define NULL				((void *)0)
+#define NULL                ((void *)0)
 
 #ifndef __ASSEMBLY__
 
 typedef enum { true = 1, false = 0 } bool;
 
 /** Describes a CPU set. */
-struct cpu_set {
-	/** Maximum CPU ID expressible with this set. */
-	unsigned long max_cpu_id;
-	/** Bitmap of CPUs in the set.
-	 * @note Typically, the bitmap is extended by embedding this structure
-	 * into a larger buffer. */
-	unsigned long bitmap[1];
+struct cpu_set
+{
+    /** Maximum CPU ID expressible with this set. */
+    unsigned long max_cpu_id;
+    /** Bitmap of CPUs in the set.
+     * @note Typically, the bitmap is extended by embedding this structure
+     * into a larger buffer. */
+    unsigned long bitmap[1];
 };
 
 typedef signed char s8;

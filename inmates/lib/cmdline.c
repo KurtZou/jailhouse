@@ -42,108 +42,120 @@
 CMDLINE_BUFFER(CMDLINE_BUFFER_SIZE) __attribute__((weak));
 
 static bool get_param(const char *param, char *value_buffer,
-		      unsigned long buffer_size)
+                      unsigned long buffer_size)
 {
-	unsigned long param_len = strlen(param);
-	const char *p = cmdline;
+    unsigned long param_len = strlen(param);
+    const char *p = cmdline;
 
-	while (1) {
-		/* read over leading blanks */
-		while (*p == ' ')
-			p++;
+    while (1)
+    {
+        /* read over leading blanks */
+        while (*p == ' ')
+            p++;
 
-		if (strncmp(p, param, param_len) == 0) {
-			p += param_len;
+        if (strncmp(p, param, param_len) == 0)
+        {
+            p += param_len;
 
-			*value_buffer = 0;
-			/* extract parameter value */
-			if (*p == '=') {
-				p++;
-				while (buffer_size > 1) {
-					if (*p == ' ' || *p == 0)
-						break;
-					*value_buffer++ = *p++;
-					buffer_size--;
-				}
-				if (buffer_size > 0)
-					*value_buffer = 0;
-			}
-			return true;
-		}
+            *value_buffer = 0;
+            /* extract parameter value */
+            if (*p == '=')
+            {
+                p++;
+                while (buffer_size > 1)
+                {
+                    if (*p == ' ' || *p == 0)
+                        break;
+                    *value_buffer++ = *p++;
+                    buffer_size--;
+                }
+                if (buffer_size > 0)
+                    *value_buffer = 0;
+            }
+            return true;
+        }
 
-		/* search for end of this parameter */
-		while (*p != ' ') {
-			if (*p == 0)
-				return false;
-			p++;
-		}
-	}
+        /* search for end of this parameter */
+        while (*p != ' ')
+        {
+            if (*p == 0)
+                return false;
+            p++;
+        }
+    }
 }
 
 const char *cmdline_parse_str(const char *param, char *value_buffer,
-			      unsigned long buffer_size,
-			      const char *default_value)
+                              unsigned long buffer_size,
+                              const char *default_value)
 {
-	if (get_param(param, value_buffer, buffer_size))
-		return value_buffer;
-	else
-		return default_value;
+    if (get_param(param, value_buffer, buffer_size))
+        return value_buffer;
+    else
+        return default_value;
 }
 
 long long cmdline_parse_int(const char *param, long long default_value)
 {
-	char value_buffer[32];
-	char *p = value_buffer;
-	bool negative = false;
-	long long value = 0;
+    char value_buffer[32];
+    char *p = value_buffer;
+    bool negative = false;
+    long long value = 0;
 
-	if (!get_param(param, value_buffer, sizeof(value_buffer)))
-		return default_value;
+    if (!get_param(param, value_buffer, sizeof(value_buffer)))
+        return default_value;
 
-	if (strncmp(p, "0x", 2) == 0) {
-		p += 2;
-		do {
-			if (*p >= '0' && *p <= '9')
-				value = (value << 4) + *p - '0';
-			else if (*p >= 'A' && *p <= 'F')
-				value = (value << 4) + *p - 'A' + 10;
-			else if (*p >= 'a' && *p <= 'f')
-				value = (value << 4) + *p - 'a' + 10;
-			else
-				return default_value;
-			p++;
-		} while (*p != 0);
-	} else {
-		if (*p == '-' || *p == '+')
-			negative = (*p++ == '-');
+    if (strncmp(p, "0x", 2) == 0)
+    {
+        p += 2;
+        do
+        {
+            if (*p >= '0' && *p <= '9')
+                value = (value << 4) + *p - '0';
+            else if (*p >= 'A' && *p <= 'F')
+                value = (value << 4) + *p - 'A' + 10;
+            else if (*p >= 'a' && *p <= 'f')
+                value = (value << 4) + *p - 'a' + 10;
+            else
+                return default_value;
+            p++;
+        }
+        while (*p != 0);
+    }
+    else
+    {
+        if (*p == '-' || *p == '+')
+            negative = (*p++ == '-');
 
-		do {
-			if (*p >= '0' && *p <= '9')
-				value = (value * 10) + *p - '0';
-			else
-				return default_value;
-			p++;
-		} while (*p != 0);
-	}
+        do
+        {
+            if (*p >= '0' && *p <= '9')
+                value = (value * 10) + *p - '0';
+            else
+                return default_value;
+            p++;
+        }
+        while (*p != 0);
+    }
 
-	return negative ? -value : value;
+    return negative ? -value : value;
 }
 
 bool cmdline_parse_bool(const char *param, bool default_value)
 {
-	char value_buffer[8];
+    char value_buffer[8];
 
-	/* return the default value if the parameter is not provided */
-	if (!get_param(param, value_buffer, sizeof(value_buffer)))
-		return default_value;
+    /* return the default value if the parameter is not provided */
+    if (!get_param(param, value_buffer, sizeof(value_buffer)))
+        return default_value;
 
-	if (!strncasecmp(value_buffer, "true", 4) ||
-	    !strncmp(value_buffer, "1", 1) || strlen(value_buffer) == 0)
-		return true;
+    if (!strncasecmp(value_buffer, "true", 4) ||
+        !strncmp(value_buffer, "1", 1) || strlen(value_buffer) == 0)
+        return true;
 
-	if (!strncasecmp(value_buffer, "false", 5) ||
-	    !strncmp(value_buffer, "0", 1))
-		return false;
+    if (!strncasecmp(value_buffer, "false", 5) ||
+        !strncmp(value_buffer, "0", 1))
+        return false;
 
-	return default_value;
+    return default_value;
 }

@@ -21,25 +21,26 @@ struct uart_chip *uart = NULL;
 
 static void uart_write_char(char c)
 {
-	while (uart->is_busy(uart))
-		cpu_relax();
-	if (panic_in_progress && panic_cpu != phys_processor_id())
-		return;
-	uart->write_char(uart, c);
+    while (uart->is_busy(uart))
+        cpu_relax();
+    if (panic_in_progress && panic_cpu != phys_processor_id())
+        return;
+    uart->write_char(uart, c);
 }
 
 void uart_write(const char *msg)
 {
-	char c;
+    char c;
 
-	while (1) {
-		c = *msg++;
-		if (!c)
-			break;
+    while (1)
+    {
+        c = *msg++;
+        if (!c)
+            break;
 
-		if (c == '\n')
-			uart_write_char('\r');
+        if (c == '\n')
+            uart_write_char('\r');
 
-		uart_write_char(c);
-	}
+        uart_write_char(c);
+    }
 }

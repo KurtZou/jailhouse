@@ -15,12 +15,13 @@
 
 #include <jailhouse/processor.h>
 
-struct trap_context {
-	unsigned long *regs;
-	u64 elr;
-	u64 esr;
-	u64 spsr;
-	u64 sp;
+struct trap_context
+{
+    unsigned long *regs;
+    u64 elr;
+    u64 esr;
+    u64 spsr;
+    u64 sp;
 };
 
 void arch_handle_trap(union registers *guest_regs);

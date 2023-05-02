@@ -12,10 +12,10 @@
  * the COPYING file in the top-level directory.
  */
 
-#define ARCH_SECTIONS							\
-	. = ALIGN(PAGE_SIZE);						\
-	.trampoline : {							\
-		trampoline_start = .;					\
-		*(.trampoline)						\
-		trampoline_end = .;					\
-	}
+#define ARCH_SECTIONS                           \
+    . = ALIGN(PAGE_SIZE);                       \
+    .trampoline : {                         \
+        trampoline_start = .;                   \
+        *(.trampoline)                      \
+        trampoline_end = .;                 \
+    }

@@ -10,4 +10,4 @@
  * the COPYING file in the top-level directory.
  */
 
-#define BITS_PER_LONG			32
+#define BITS_PER_LONG           32

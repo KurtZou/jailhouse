@@ -13,9 +13,9 @@
 #ifndef _JAILHOUSE_ASM_CONTROL_H
 #define _JAILHOUSE_ASM_CONTROL_H
 
-#define SGI_INJECT	0
-#define SGI_EVENT	1
-#define SGI_MASK	((1 << SGI_EVENT) | (1 << SGI_INJECT))
+#define SGI_INJECT  0
+#define SGI_EVENT   1
+#define SGI_MASK    ((1 << SGI_EVENT) | (1 << SGI_INJECT))
 
 #ifndef __ASSEMBLY__
 

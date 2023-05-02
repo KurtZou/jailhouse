@@ -41,20 +41,21 @@
 
 #include <inmate.h>
 
-#define GICD_ISENABLER	0x0100
+#define GICD_ISENABLER  0x0100
 
-#define TIMER_IRQ	27
+#define TIMER_IRQ   27
 
-#define is_sgi_ppi(irqn)		((irqn) < 32)
-#define is_spi(irqn)			((irqn) > 31 && (irqn) < 1020)
+#define is_sgi_ppi(irqn)        ((irqn) < 32)
+#define is_spi(irqn)            ((irqn) > 31 && (irqn) < 1020)
 
 #ifndef __ASSEMBLY__
 
-struct gic {
-	int (*init)(void);
-	void (*enable)(unsigned int irqn);
-	void (*write_eoi)(u32 irqn);
-	u32 (*read_ack)(void);
+struct gic
+{
+    int (*init)(void);
+    void (*enable)(unsigned int irqn);
+    void (*write_eoi)(u32 irqn);
+    u32 (*read_ack)(void);
 };
 
 #endif /* !__ASSEMBLY__ */

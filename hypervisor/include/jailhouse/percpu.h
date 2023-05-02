@@ -29,60 +29,64 @@
  */
 
 /** Per-CPU states accessible across all CPUs. */
-struct public_per_cpu {
-	/** Per-CPU root page table. Public because it has to be accessible for
-	 *  page walks at any time. */
-	u8 root_table_page[PAGE_SIZE] __attribute__((aligned(PAGE_SIZE)));
+struct public_per_cpu
+{
+    /** Per-CPU root page table. Public because it has to be accessible for
+     *  page walks at any time. */
+    u8 root_table_page[PAGE_SIZE] __attribute__((aligned(PAGE_SIZE)));
 
-	/** Logical CPU ID (same as Linux). */
-	unsigned int cpu_id;
-	/** Owning cell. */
-	struct cell *cell;
+    /** Logical CPU ID (same as Linux). */
+    unsigned int cpu_id;
+    /** Owning cell. */
+    struct cell *cell;
 
-	/** Statistic counters. */
-	u32 stats[JAILHOUSE_NUM_CPU_STATS];
+    /** Statistic counters. */
+    u32 stats[JAILHOUSE_NUM_CPU_STATS];
 
-	/** State of the shutdown process. Possible values:
-	 * @li SHUTDOWN_NONE: no shutdown in progress
-	 * @li SHUTDOWN_STARTED: shutdown in progress
-	 * @li negative error code: shutdown failed
-	 */
-	int shutdown_state;
-	/** True if CPU violated a cell boundary or cause some other failure in
-	 *  guest mode. */
-	bool failed;
+    /** State of the shutdown process. Possible values:
+     * @li SHUTDOWN_NONE: no shutdown in progress
+     * @li SHUTDOWN_STARTED: shutdown in progress
+     * @li negative error code: shutdown failed
+     */
+    int shutdown_state;
+    /** True if CPU violated a cell boundary or cause some other failure in
+     *  guest mode. */
+    bool failed;
 
-	/** Set to true for instructing the CPU to suspend. */
-	volatile bool suspend_cpu;
-	/** True if CPU is suspended. */
-	volatile bool cpu_suspended;
-	/** Set to true for a pending TLB flush for the paging layer that does
-	 *  host physical <-> guest physical memory mappings. */
-	bool flush_vcpu_caches;
+    /** Set to true for instructing the CPU to suspend. */
+    volatile bool suspend_cpu;
+    /** True if CPU is suspended. */
+    volatile bool cpu_suspended;
+    /** Set to true for a pending TLB flush for the paging layer that does
+     *  host physical <-> guest physical memory mappings. */
+    bool flush_vcpu_caches;
 
-	ARCH_PUBLIC_PERCPU_FIELDS;
+    ARCH_PUBLIC_PERCPU_FIELDS;
 } __attribute__((aligned(PAGE_SIZE)));
 
 /** Per-CPU states. */
-struct per_cpu {
-	/* Must be first field! */
-	union {
-		/** Stack used while in hypervisor mode. */
-		u8 stack[STACK_SIZE];
-		struct {
-			u8 __fill[STACK_SIZE - sizeof(union registers)];
-			/** Guest registers saved on stack during VM exit. */
-			union registers guest_regs;
-		};
-	};
+struct per_cpu
+{
+    /* Must be first field! */
+    union
+    {
+        /** Stack used while in hypervisor mode. */
+        u8 stack[STACK_SIZE];
+        struct
+        {
+            u8 __fill[STACK_SIZE - sizeof(union registers)];
+            /** Guest registers saved on stack during VM exit. */
+            union registers guest_regs;
+        };
+    };
 
-	/** Per-CPU paging structures. */
-	struct paging_structures pg_structs;
+    /** Per-CPU paging structures. */
+    struct paging_structures pg_structs;
 
-	ARCH_PERCPU_FIELDS;
+    ARCH_PERCPU_FIELDS;
 
-	/* Must be last field! */
-	struct public_per_cpu public;
+    /* Must be last field! */
+    struct public_per_cpu public;
 } __attribute__((aligned(PAGE_SIZE)));
 
 /**
@@ -92,7 +96,7 @@ struct per_cpu {
  */
 static inline struct per_cpu *this_cpu_data(void)
 {
-	return (struct per_cpu *)LOCAL_CPU_BASE;
+    return (struct per_cpu *)LOCAL_CPU_BASE;
 }
 
 /**
@@ -102,7 +106,7 @@ static inline struct per_cpu *this_cpu_data(void)
  */
 static inline struct public_per_cpu *this_cpu_public(void)
 {
-	return &this_cpu_data()->public;
+    return &this_cpu_data()->public;
 }
 
 /**
@@ -112,7 +116,7 @@ static inline struct public_per_cpu *this_cpu_public(void)
  */
 static inline unsigned int this_cpu_id(void)
 {
-	return this_cpu_public()->cpu_id;
+    return this_cpu_public()->cpu_id;
 }
 
 /**
@@ -122,29 +126,29 @@ static inline unsigned int this_cpu_id(void)
  */
 static inline struct cell *this_cell(void)
 {
-	return this_cpu_public()->cell;
+    return this_cpu_public()->cell;
 }
 
 /**
  * Retrieve the data structure of the specified CPU.
- * @param cpu	ID of the target CPU.
+ * @param cpu   ID of the target CPU.
  *
  * @return Pointer to per-CPU data structure.
  */
 static inline struct per_cpu *per_cpu(unsigned int cpu)
 {
-	return (struct per_cpu *)(__page_pool + cpu * sizeof(struct per_cpu));
+    return (struct per_cpu *)(__page_pool + cpu * sizeof(struct per_cpu));
 }
 
 /**
  * Retrieve the publicly accessible data structure of the specified CPU.
- * @param cpu	ID of the target CPU.
+ * @param cpu   ID of the target CPU.
  *
  * @return Pointer to public per-CPU data structure.
  */
 static inline struct public_per_cpu *public_per_cpu(unsigned int cpu)
 {
-	return &per_cpu(cpu)->public;
+    return &per_cpu(cpu)->public;
 }
 
 /** @} **/

@@ -38,27 +38,27 @@
 
 #ifndef __ASSEMBLY__
 
-#define dmb(domain)	asm volatile("dmb " #domain ::: "memory")
-#define dsb(domain)	asm volatile("dsb " #domain ::: "memory")
+#define dmb(domain) asm volatile("dmb " #domain ::: "memory")
+#define dsb(domain) asm volatile("dsb " #domain ::: "memory")
 
 static inline void cpu_relax(void)
 {
-	asm volatile("" : : : "memory");
+    asm volatile("" : : : "memory");
 }
 
 static inline void memory_barrier(void)
 {
-	dmb(ish);
+    dmb(ish);
 }
 
 static inline void synchronization_barrier(void)
 {
-	dsb(ish);
+    dsb(ish);
 }
 
 static inline void instruction_barrier(void)
 {
-	asm volatile("isb");
+    asm volatile("isb");
 }
 
 #endif /* __ASSEMBLY__ */

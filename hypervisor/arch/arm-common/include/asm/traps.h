@@ -10,10 +10,11 @@
  * the COPYING file in the top-level directory.
  */
 
-enum trap_return {
-	TRAP_HANDLED		= 1,
-	TRAP_UNHANDLED		= 0,
-	TRAP_FORBIDDEN		= -1,
+enum trap_return
+{
+    TRAP_HANDLED        = 1,
+    TRAP_UNHANDLED      = 0,
+    TRAP_FORBIDDEN      = -1,
 };
 
 typedef enum trap_return (*trap_handler)(struct trap_context *ctx);

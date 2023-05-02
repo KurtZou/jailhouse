@@ -38,30 +38,30 @@
 
 #include <inmate.h>
 
-#define APIC_DM_INIT	(5 << 8)
-#define APIC_DM_SIPI	(6 << 8)
+#define APIC_DM_INIT    (5 << 8)
+#define APIC_DM_SIPI    (6 << 8)
 
 extern void (* volatile ap_entry)(void);
 
 void smp_wait_for_all_cpus(void)
 {
-	while (smp_num_cpus < comm_region->num_cpus)
-		cpu_relax();
+    while (smp_num_cpus < comm_region->num_cpus)
+        cpu_relax();
 }
 
 void smp_start_cpu(unsigned int cpu_id, void (*entry)(void))
 {
-	u64 base_val = ((u64)cpu_id << 32) | APIC_LVL_ASSERT;
+    u64 base_val = ((u64)cpu_id << 32) | APIC_LVL_ASSERT;
 
-	ap_entry = entry;
-	stack = zalloc(PAGE_SIZE, PAGE_SIZE) + PAGE_SIZE;
+    ap_entry = entry;
+    stack = zalloc(PAGE_SIZE, PAGE_SIZE) + PAGE_SIZE;
 
-	write_msr(X2APIC_ICR, base_val | APIC_DM_INIT);
-	delay_us(10000);
-	write_msr(X2APIC_ICR, base_val | APIC_DM_SIPI);
-	delay_us(200);
-	write_msr(X2APIC_ICR, base_val | APIC_DM_SIPI);
+    write_msr(X2APIC_ICR, base_val | APIC_DM_INIT);
+    delay_us(10000);
+    write_msr(X2APIC_ICR, base_val | APIC_DM_SIPI);
+    delay_us(200);
+    write_msr(X2APIC_ICR, base_val | APIC_DM_SIPI);
 
-	while (ap_entry && stack)
-		cpu_relax();
+    while (ap_entry && stack)
+        cpu_relax();
 }

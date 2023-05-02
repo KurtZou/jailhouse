@@ -51,48 +51,50 @@ struct x86_cpu_features x86_cpu_features;
  */
 void __attribute__((section(".boot"))) arch_init_features(void)
 {
-	u64 features;
+    u64 features;
 
-	features = cpuid_edx(X86_CPUID_FEATURES, 0);
-	/* Check availability of FPU */
-	x86_cpu_features.fpu = !!(features & X86_FEATURE_FPU);
+    features = cpuid_edx(X86_CPUID_FEATURES, 0);
+    /* Check availability of FPU */
+    x86_cpu_features.fpu = !!(features & X86_FEATURE_FPU);
 
-	/* Discover and enable FXSR */
-	if (features & X86_FEATURE_FXSR) {
-		write_cr4(read_cr4() | X86_CR4_OSFXSR);
-		x86_cpu_features.fxsr = true;
-	}
+    /* Discover and enable FXSR */
+    if (features & X86_FEATURE_FXSR)
+    {
+        write_cr4(read_cr4() | X86_CR4_OSFXSR);
+        x86_cpu_features.fxsr = true;
+    }
 
-	/* Check availability of SSE */
-	x86_cpu_features.sse = !!(features & X86_FEATURE_SSE);
-	x86_cpu_features.sse2 = !!(features & X86_FEATURE_SSE2);
+    /* Check availability of SSE */
+    x86_cpu_features.sse = !!(features & X86_FEATURE_SSE);
+    x86_cpu_features.sse2 = !!(features & X86_FEATURE_SSE2);
 
-	/* ECX hides the rest */
-	features = cpuid_ecx(X86_CPUID_FEATURES, 0);
-	x86_cpu_features.sse3 = !!(features & X86_FEATURE_SSE3);
-	x86_cpu_features.sse4_1 = !!(features & X86_FEATURE_SSE4_1);
-	x86_cpu_features.sse4_2 = !!(features & X86_FEATURE_SSE4_2);
-	x86_cpu_features.pclmulqdq = !!(features & X86_FEATURE_PCLMULQDQ);
+    /* ECX hides the rest */
+    features = cpuid_ecx(X86_CPUID_FEATURES, 0);
+    x86_cpu_features.sse3 = !!(features & X86_FEATURE_SSE3);
+    x86_cpu_features.sse4_1 = !!(features & X86_FEATURE_SSE4_1);
+    x86_cpu_features.sse4_2 = !!(features & X86_FEATURE_SSE4_2);
+    x86_cpu_features.pclmulqdq = !!(features & X86_FEATURE_PCLMULQDQ);
 
-	if (features & X86_FEATURE_XSAVE) {
-		/* Enable XSAVE related instructions */
-		write_cr4(read_cr4() | X86_CR4_OSXSAVE);
-		x86_cpu_features.xsave = true;
+    if (features & X86_FEATURE_XSAVE)
+    {
+        /* Enable XSAVE related instructions */
+        write_cr4(read_cr4() | X86_CR4_OSXSAVE);
+        x86_cpu_features.xsave = true;
 
-		/*
-		 * Intel SDM 13.2: A bit can be set in XCR0 if and only if the
-		 * corresponding bit is set in this bitmap.  Every processor
-		 * that supports the XSAVE feature set will set EAX[0] (x87
-		 * state) and EAX[1] (SSE state).
-		 *
-		 * We can always set SSE + FP, but only set AVX if available.
-		 */
+        /*
+         * Intel SDM 13.2: A bit can be set in XCR0 if and only if the
+         * corresponding bit is set in this bitmap.  Every processor
+         * that supports the XSAVE feature set will set EAX[0] (x87
+         * state) and EAX[1] (SSE state).
+         *
+         * We can always set SSE + FP, but only set AVX if available.
+         */
 
-		features = cpuid_edax(X86_CPUID_XSTATE, 0);
-		write_xcr0(read_xcr0() | (features & X86_XCR0_AVX) | \
-			   X86_XCR0_SSE | X86_XCR0_X87);
-		x86_cpu_features.avx = !!(features & X86_XCR0_AVX);
-	}
+        features = cpuid_edax(X86_CPUID_XSTATE, 0);
+        write_xcr0(read_xcr0() | (features & X86_XCR0_AVX) | \
+                   X86_XCR0_SSE | X86_XCR0_X87);
+        x86_cpu_features.avx = !!(features & X86_XCR0_AVX);
+    }
 
-	/* hand control back to the header */
+    /* hand control back to the header */
 }

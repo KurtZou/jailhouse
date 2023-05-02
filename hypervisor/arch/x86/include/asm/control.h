@@ -17,7 +17,7 @@ struct exception_frame;
 enum x86_init_sipi { X86_INIT, X86_SIPI };
 
 void x86_send_init_sipi(unsigned int cpu_id, enum x86_init_sipi type,
-			int sipi_vector);
+                        int sipi_vector);
 
 void x86_check_events(void);
 

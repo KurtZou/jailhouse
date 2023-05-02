@@ -48,33 +48,34 @@ static const struct gic *gic = &gic_v2;
 /* Replaces the weak reference in header.S */
 void vector_irq(void)
 {
-	u32 irqn;
+    u32 irqn;
 
-	while (1) {
-		irqn = gic->read_ack();
-		if (irqn == 0x3ff)
-			break;
+    while (1)
+    {
+        irqn = gic->read_ack();
+        if (irqn == 0x3ff)
+            break;
 
-		if (irq_handler)
-			irq_handler(irqn);
+        if (irq_handler)
+            irq_handler(irqn);
 
-		gic->write_eoi(irqn);
-	}
+        gic->write_eoi(irqn);
+    }
 }
 
 void irq_init(irq_handler_t handler)
 {
-	if (comm_region->gic_version == 3)
-		gic = &gic_v3;
+    if (comm_region->gic_version == 3)
+        gic = &gic_v3;
 
-	gic->init();
+    gic->init();
 
-	irq_handler = handler;
+    irq_handler = handler;
 
-	gic_setup_irq_stack();
+    gic_setup_irq_stack();
 }
 
 void irq_enable(unsigned int irq)
 {
-	gic->enable(irq);
+    gic->enable(irq);
 }

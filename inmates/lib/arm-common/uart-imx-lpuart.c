@@ -37,9 +37,9 @@
 #include <inmate.h>
 #include <uart.h>
 
-#define UART_DATA		0x1c
-#define UART_STAT		0x14
-#define STAT_TDRE		(1 << 23)
+#define UART_DATA       0x1c
+#define UART_STAT       0x14
+#define STAT_TDRE       (1 << 23)
 
 static void uart_imx_lpuart_init(struct uart_chip *chip)
 {
@@ -47,12 +47,12 @@ static void uart_imx_lpuart_init(struct uart_chip *chip)
 
 static bool uart_imx_lpuart_is_busy(struct uart_chip *chip)
 {
-	return !(mmio_read32(chip->base + UART_STAT) & STAT_TDRE);
+    return !(mmio_read32(chip->base + UART_STAT) & STAT_TDRE);
 }
 
 static void uart_imx_lpuart_write(struct uart_chip *chip, char c)
 {
-	mmio_write32(chip->base + UART_DATA, c);
+    mmio_write32(chip->base + UART_DATA, c);
 }
 
 DEFINE_UART(imx_lpuart, "IMX-LPUART", JAILHOUSE_CON_TYPE_IMX_LPUART);

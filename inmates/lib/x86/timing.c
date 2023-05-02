@@ -38,16 +38,16 @@
 
 #include <inmate.h>
 
-#define PM_TIMER_HZ		3579545
+#define PM_TIMER_HZ     3579545
 #define PM_TIMER_OVERFLOW      ((0x1000000 * NS_PER_SEC) / PM_TIMER_HZ)
 
-#define IA32_TSC_DEADLINE	0x6e0
+#define IA32_TSC_DEADLINE   0x6e0
 
-#define X2APIC_LVTT		0x832
-# define LVTT_TSC_DEADLINE	(1 << 18)
-#define X2APIC_TMICT		0x838
-#define X2APIC_TMCCT		0x839
-#define X2APIC_TDCR		0x83e
+#define X2APIC_LVTT     0x832
+# define LVTT_TSC_DEADLINE  (1 << 18)
+#define X2APIC_TMICT        0x838
+#define X2APIC_TMCCT        0x839
+#define X2APIC_TDCR     0x83e
 
 static unsigned long apic_tick_freq;
 static unsigned long long pm_timer_last[SMP_MAX_CPUS];
@@ -60,91 +60,94 @@ static bool tsc_deadline;
 static u64 rdtsc(void)
 {
 #ifdef __x86_64__
-	u32 lo, hi;
+    u32 lo, hi;
 
-	asm volatile("rdtsc" : "=a" (lo), "=d" (hi));
-	return (u64)lo | (((u64)hi) << 32);
+    asm volatile("rdtsc" : "=a" (lo), "=d" (hi));
+    return (u64)lo | (((u64)hi) << 32);
 #else
-	u64 v;
+    u64 v;
 
-	asm volatile("rdtsc" : "=A" (v));
-	return v;
+    asm volatile("rdtsc" : "=A" (v));
+    return v;
 #endif
 }
 
 unsigned long tsc_read_ns(void)
 {
-	unsigned int cpu = cpu_id();
-	unsigned long tmr;
+    unsigned int cpu = cpu_id();
+    unsigned long tmr;
 
-	tmr = ((rdtsc() & 0xffffffffLL) * NS_PER_SEC) / tsc_freq;
-	if (tmr < tsc_last[cpu])
-		tsc_overflows[cpu] += tsc_overflow;
-	tsc_last[cpu] = tmr;
-	return tmr + tsc_overflows[cpu];
+    tmr = ((rdtsc() & 0xffffffffLL) * NS_PER_SEC) / tsc_freq;
+    if (tmr < tsc_last[cpu])
+        tsc_overflows[cpu] += tsc_overflow;
+    tsc_last[cpu] = tmr;
+    return tmr + tsc_overflows[cpu];
 }
 
 unsigned long tsc_init(void)
 {
-	tsc_freq = comm_region->tsc_khz * 1000L;
-	tsc_overflow = (0x100000000L * NS_PER_SEC) / tsc_freq;
+    tsc_freq = comm_region->tsc_khz * 1000L;
+    tsc_overflow = (0x100000000L * NS_PER_SEC) / tsc_freq;
 
-	return tsc_freq;
+    return tsc_freq;
 }
 
 unsigned long long pm_timer_read(void)
 {
-	unsigned int cpu = cpu_id();
-	unsigned long long tmr;
+    unsigned int cpu = cpu_id();
+    unsigned long long tmr;
 
-	tmr = ((unsigned long long)(inl(comm_region->pm_timer_address)
-		& 0x00ffffff) * NS_PER_SEC) / PM_TIMER_HZ;
-	if (tmr < pm_timer_last[cpu])
-		pm_timer_overflows[cpu] += PM_TIMER_OVERFLOW;
-	pm_timer_last[cpu] = tmr;
-	return tmr + pm_timer_overflows[cpu];
+    tmr = ((unsigned long long)(inl(comm_region->pm_timer_address)
+                                & 0x00ffffff) * NS_PER_SEC) / PM_TIMER_HZ;
+    if (tmr < pm_timer_last[cpu])
+        pm_timer_overflows[cpu] += PM_TIMER_OVERFLOW;
+    pm_timer_last[cpu] = tmr;
+    return tmr + pm_timer_overflows[cpu];
 }
 
 void delay_us(unsigned long microsecs)
 {
-	unsigned long long timeout = pm_timer_read() + microsecs * NS_PER_USEC;
+    unsigned long long timeout = pm_timer_read() + microsecs * NS_PER_USEC;
 
-	while ((long long)(timeout - pm_timer_read()) > 0)
-		cpu_relax();
+    while ((long long)(timeout - pm_timer_read()) > 0)
+        cpu_relax();
 }
 
 unsigned long apic_timer_init(unsigned int vector)
 {
-	unsigned long apic_freq;
-	unsigned long ecx;
+    unsigned long apic_freq;
+    unsigned long ecx;
 
-	asm volatile("cpuid" : "=c" (ecx) : "a" (1)
-		: "rbx", "rdx", "memory");
-	tsc_deadline = !!(ecx & (1 << 24));
+    asm volatile("cpuid" : "=c" (ecx) : "a" (1)
+                 : "rbx", "rdx", "memory");
+    tsc_deadline = !!(ecx & (1 << 24));
 
-	if (tsc_deadline) {
-		vector |= LVTT_TSC_DEADLINE;
-		apic_tick_freq = tsc_init();
-		apic_freq = apic_tick_freq / 1000;
-	} else {
-		apic_tick_freq = comm_region->apic_khz * 1000 / 16;
-		apic_freq = comm_region->apic_khz;
-	}
+    if (tsc_deadline)
+    {
+        vector |= LVTT_TSC_DEADLINE;
+        apic_tick_freq = tsc_init();
+        apic_freq = apic_tick_freq / 1000;
+    }
+    else
+    {
+        apic_tick_freq = comm_region->apic_khz * 1000 / 16;
+        apic_freq = comm_region->apic_khz;
+    }
 
-	write_msr(X2APIC_LVTT, vector);
+    write_msr(X2APIC_LVTT, vector);
 
-	/* Required when using TSC deadline mode. */
-	asm volatile("mfence" : : : "memory");
+    /* Required when using TSC deadline mode. */
+    asm volatile("mfence" : : : "memory");
 
-	return apic_freq;
+    return apic_freq;
 }
 
 void apic_timer_set(unsigned long long timeout_ns)
 {
-	unsigned long long ticks = timeout_ns * apic_tick_freq / NS_PER_SEC;
+    unsigned long long ticks = timeout_ns * apic_tick_freq / NS_PER_SEC;
 
-	if (tsc_deadline)
-		write_msr(IA32_TSC_DEADLINE, rdtsc() + ticks);
-	else
-		write_msr(X2APIC_TMICT, ticks);
+    if (tsc_deadline)
+        write_msr(IA32_TSC_DEADLINE, rdtsc() + ticks);
+    else
+        write_msr(X2APIC_TMICT, ticks);
 }

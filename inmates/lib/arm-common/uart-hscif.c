@@ -39,45 +39,46 @@
 #include <inmate.h>
 #include <uart.h>
 
-#define HSCIF_HSBRR			0x04
-#define HSCIF_HSSCR			0x08
-#define HSCIF_HSFTDR			0x0C
-#define HSCIF_HSFSR			0x10
-#define HSCIF_HSTTRGR			0x58
+#define HSCIF_HSBRR         0x04
+#define HSCIF_HSSCR         0x08
+#define HSCIF_HSFTDR            0x0C
+#define HSCIF_HSFSR         0x10
+#define HSCIF_HSTTRGR           0x58
 
-#define HSCIF_HSSCR_RE			0x0010
-#define HSCIF_HSSCR_TE			0x0020
+#define HSCIF_HSSCR_RE          0x0010
+#define HSCIF_HSSCR_TE          0x0020
 
-#define HSCIF_HSFSR_TDFE		0x0020
-#define HSCIF_HSFSR_TEND		0x0040
+#define HSCIF_HSFSR_TDFE        0x0020
+#define HSCIF_HSFSR_TEND        0x0040
 
-#define HSCIF_FIFO_SIZE			128
+#define HSCIF_FIFO_SIZE         128
 
 static void uart_hscif_init(struct uart_chip *chip)
 {
-	u16 hsscr;
+    u16 hsscr;
 
-	if (chip->divider) {
-		hsscr = mmio_read16(chip->base + HSCIF_HSSCR);
-		mmio_write16(chip->base + HSCIF_HSSCR,
-			     hsscr & ~(HSCIF_HSSCR_TE | HSCIF_HSSCR_RE));
-		mmio_write8(chip->base + HSCIF_HSBRR, chip->divider);
-		mmio_write16(chip->base + HSCIF_HSTTRGR, HSCIF_FIFO_SIZE / 2);
-		mmio_write16(chip->base + HSCIF_HSSCR, hsscr | HSCIF_HSSCR_TE);
-	}
+    if (chip->divider)
+    {
+        hsscr = mmio_read16(chip->base + HSCIF_HSSCR);
+        mmio_write16(chip->base + HSCIF_HSSCR,
+                     hsscr & ~(HSCIF_HSSCR_TE | HSCIF_HSSCR_RE));
+        mmio_write8(chip->base + HSCIF_HSBRR, chip->divider);
+        mmio_write16(chip->base + HSCIF_HSTTRGR, HSCIF_FIFO_SIZE / 2);
+        mmio_write16(chip->base + HSCIF_HSSCR, hsscr | HSCIF_HSSCR_TE);
+    }
 }
 
 static bool uart_hscif_is_busy(struct uart_chip *chip)
 {
-	return !(mmio_read16(chip->base + HSCIF_HSFSR) & HSCIF_HSFSR_TDFE);
+    return !(mmio_read16(chip->base + HSCIF_HSFSR) & HSCIF_HSFSR_TDFE);
 }
 
 static void uart_hscif_write(struct uart_chip *chip, char c)
 {
-	mmio_write8(chip->base + HSCIF_HSFTDR, c);
-	mmio_write16(chip->base + HSCIF_HSFSR,
-		     mmio_read16(chip->base + HSCIF_HSFSR) &
-				 ~(HSCIF_HSFSR_TDFE | HSCIF_HSFSR_TEND));
+    mmio_write8(chip->base + HSCIF_HSFTDR, c);
+    mmio_write16(chip->base + HSCIF_HSFSR,
+                 mmio_read16(chip->base + HSCIF_HSFSR) &
+                 ~(HSCIF_HSFSR_TDFE | HSCIF_HSFSR_TEND));
 }
 
 DEFINE_UART(hscif, "HSCIF", JAILHOUSE_CON_TYPE_HSCIF);

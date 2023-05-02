@@ -41,44 +41,46 @@
 
 static void reg_out_mmio8(struct uart_chip *chip, unsigned int reg, u32 value)
 {
-	mmio_write8(chip->base + reg, value);
+    mmio_write8(chip->base + reg, value);
 }
 
 static u32 reg_in_mmio8(struct uart_chip *chip, unsigned int reg)
 {
-	return mmio_read8(chip->base + reg);
+    return mmio_read8(chip->base + reg);
 }
 
 void arch_console_init(struct uart_chip *chip)
 {
-	struct jailhouse_console *console = &comm_region->console;
-	unsigned int gate_nr;
-	bool gate_inverted;
-	void *clock_reg;
-	u32 clock_gates;
+    struct jailhouse_console *console = &comm_region->console;
+    unsigned int gate_nr;
+    bool gate_inverted;
+    void *clock_reg;
+    u32 clock_gates;
 
-	gate_nr = cmdline_parse_int("con-gate-nr", console->gate_nr);
-	gate_inverted = cmdline_parse_bool("con-gate-inverted",
-					CON_HAS_INVERTED_GATE(console->flags));
-	clock_reg = (void *)(unsigned long)
-		cmdline_parse_int("con-clock-reg", console->clock_reg);
+    gate_nr = cmdline_parse_int("con-gate-nr", console->gate_nr);
+    gate_inverted = cmdline_parse_bool("con-gate-inverted",
+                                       CON_HAS_INVERTED_GATE(console->flags));
+    clock_reg = (void *)(unsigned long)
+                cmdline_parse_int("con-clock-reg", console->clock_reg);
 
-	if (cmdline_parse_bool("con-regdist-1",
-			       CON_USES_REGDIST_1(console->flags))) {
-		chip->reg_out = reg_out_mmio8;
-		chip->reg_in = reg_in_mmio8;
-	}
+    if (cmdline_parse_bool("con-regdist-1",
+                           CON_USES_REGDIST_1(console->flags)))
+    {
+        chip->reg_out = reg_out_mmio8;
+        chip->reg_in = reg_in_mmio8;
+    }
 
-	if (chip->base)
-		map_range(chip->base, PAGE_SIZE, MAP_UNCACHED);
+    if (chip->base)
+        map_range(chip->base, PAGE_SIZE, MAP_UNCACHED);
 
-	if (clock_reg) {
-		map_range(clock_reg, PAGE_SIZE, MAP_UNCACHED);
-		clock_gates = mmio_read32(clock_reg);
-		if (gate_inverted)
-			clock_gates &= ~(1 << gate_nr);
-		else
-			clock_gates |= (1 << gate_nr);
-		mmio_write32(clock_reg, clock_gates);
-	}
+    if (clock_reg)
+    {
+        map_range(clock_reg, PAGE_SIZE, MAP_UNCACHED);
+        clock_gates = mmio_read32(clock_reg);
+        if (gate_inverted)
+            clock_gates &= ~(1 << gate_nr);
+        else
+            clock_gates |= (1 << gate_nr);
+        mmio_write32(clock_reg, clock_gates);
+    }
 }

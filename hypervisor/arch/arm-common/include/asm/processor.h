@@ -10,25 +10,25 @@
  * the COPYING file in the top-level directory.
  */
 
-#define dmb(domain)	asm volatile("dmb " #domain ::: "memory")
-#define dsb(domain)	asm volatile("dsb " #domain ::: "memory")
-#define isb()		asm volatile("isb")
+#define dmb(domain) asm volatile("dmb " #domain ::: "memory")
+#define dsb(domain) asm volatile("dsb " #domain ::: "memory")
+#define isb()       asm volatile("isb")
 
 #ifndef __ASSEMBLY__
 
 static inline void cpu_relax(void)
 {
-	asm volatile("" : : : "memory");
+    asm volatile("" : : : "memory");
 }
 
 static inline void memory_barrier(void)
 {
-	dmb(ish);
+    dmb(ish);
 }
 
 static inline void memory_load_barrier(void)
 {
-	dmb(ish);
+    dmb(ish);
 }
 
 #endif /* !__ASSEMBLY__ */

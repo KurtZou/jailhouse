@@ -16,10 +16,11 @@
 
 struct cell;
 
-enum dcache_flush {
-	DCACHE_CLEAN,
-	DCACHE_INVALIDATE,
-	DCACHE_CLEAN_AND_INVALIDATE,
+enum dcache_flush
+{
+    DCACHE_CLEAN,
+    DCACHE_INVALIDATE,
+    DCACHE_CLEAN_AND_INVALIDATE,
 };
 
 void arm_dcaches_flush(void *addr, unsigned long size, enum dcache_flush flush);

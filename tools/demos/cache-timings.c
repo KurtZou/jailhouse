@@ -24,6 +24,6 @@ void inmate_main(void);
 
 int main(void)
 {
-	inmate_main();
-	return 0;
+    inmate_main();
+    return 0;
 }

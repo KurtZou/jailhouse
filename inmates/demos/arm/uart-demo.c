@@ -14,14 +14,15 @@
 
 void inmate_main(void)
 {
-	unsigned int i = 0, j;
-	/*
-	 * The cell config can set up a mapping to access UARTx instead of UART0
-	 */
-	while(++i) {
-		for (j = 0; j < 10000; j++);
-		printk("Hello %d from inmate demo cell!\n", i);
-	}
+    unsigned int i = 0, j;
+    /*
+     * The cell config can set up a mapping to access UARTx instead of UART0
+     */
+    while(++i)
+    {
+        for (j = 0; j < 10000; j++);
+        printk("Hello %d from inmate demo cell!\n", i);
+    }
 
-	/* lr should be 0, so a return will go back to the reset vector */
+    /* lr should be 0, so a return will go back to the reset vector */
 }

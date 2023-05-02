@@ -25,20 +25,20 @@
  */
 
 /** Size of smallest page. */
-#define PAGE_SIZE		(1 << PAGE_SHIFT)
+#define PAGE_SIZE       (1 << PAGE_SHIFT)
 /** Mask of bits selecting a page. */
-#define PAGE_MASK		~(PAGE_SIZE - 1)
+#define PAGE_MASK       ~(PAGE_SIZE - 1)
 /** Mask of bits selecting an offset in a page. */
-#define PAGE_OFFS_MASK		(PAGE_SIZE - 1)
+#define PAGE_OFFS_MASK      (PAGE_SIZE - 1)
 
 /** Align address to page boundary (round up). */
-#define PAGE_ALIGN(s)		(((s) + PAGE_SIZE-1) & PAGE_MASK)
+#define PAGE_ALIGN(s)       (((s) + PAGE_SIZE-1) & PAGE_MASK)
 /** Count number of pages for given size (round up). */
-#define PAGES(s)		(((s) + PAGE_SIZE-1) / PAGE_SIZE)
+#define PAGES(s)        (((s) + PAGE_SIZE-1) / PAGE_SIZE)
 
 /** Location of per-CPU data structure in hypervisor address space. */
-#define LOCAL_CPU_BASE		(TEMPORARY_MAPPING_BASE + \
-				 NUM_TEMPORARY_PAGES * PAGE_SIZE)
+#define LOCAL_CPU_BASE      (TEMPORARY_MAPPING_BASE + \
+                 NUM_TEMPORARY_PAGES * PAGE_SIZE)
 /** @} */
 
 #include <asm/paging.h>
@@ -57,17 +57,18 @@
 extern u8 __page_pool[];
 
 /** Page pool state. */
-struct page_pool {
-	/** Base address of the pool. */
-	void *base_address;
-	/** Number of managed pages. */
-	unsigned long pages;
-	/** Number of currently used pages. */
-	unsigned long used_pages;
-	/** Base address for bitmap of used pages. */
-	unsigned long *used_bitmap;
-	/** Set @c PAGE_SCRUB_ON_FREE to zero-out pages on release. */
-	unsigned long flags;
+struct page_pool
+{
+    /** Base address of the pool. */
+    void *base_address;
+    /** Number of managed pages. */
+    unsigned long pages;
+    /** Number of currently used pages. */
+    unsigned long used_pages;
+    /** Base address for bitmap of used pages. */
+    unsigned long *used_bitmap;
+    /** Set @c PAGE_SCRUB_ON_FREE to zero-out pages on release. */
+    unsigned long flags;
 };
 
 /**
@@ -76,14 +77,14 @@ struct page_pool {
  */
 
 /** Do not force changes into RAM, i.e. avoid costly cache flushes. */
-#define PAGING_NON_COHERENT	0
+#define PAGING_NON_COHERENT 0
 /** Make changes visible to non-snooping readers, i.e. commit them to RAM. */
-#define PAGING_COHERENT		0x1
+#define PAGING_COHERENT     0x1
 
 /** Do not use huge pages for creating a mapping. */
-#define PAGING_NO_HUGE		0
+#define PAGING_NO_HUGE      0
 /** When possible, use huge pages for creating a mapping. */
-#define PAGING_HUGE		0x2
+#define PAGING_HUGE     0x2
 /** @} */
 
 /** Page table reference. */
@@ -93,110 +94,113 @@ typedef pt_entry_t page_table_t;
  * Parameters and callbacks for creating and parsing paging structures of a
  * specific level.
  */
-struct paging {
-	/** Page size of terminal entries in this level or 0 if none are
-	 * supported. */
-	unsigned int page_size;
+struct paging
+{
+    /** Page size of terminal entries in this level or 0 if none are
+     * supported. */
+    unsigned int page_size;
 
-	/**
-	 * Get entry in given table corresponding to virt address.
-	 * @param page_table Reference to page table.
-	 * @param virt Virtual address to look up.
-	 *
-	 * @return Page table entry.
-	 */
-	pt_entry_t (*get_entry)(page_table_t page_table, unsigned long virt);
+    /**
+     * Get entry in given table corresponding to virt address.
+     * @param page_table Reference to page table.
+     * @param virt Virtual address to look up.
+     *
+     * @return Page table entry.
+     */
+    pt_entry_t (*get_entry)(page_table_t page_table, unsigned long virt);
 
-	/**
-	 * Returns true if entry is a valid and supports the provided access
-	 * flags (terminal and non-terminal entries).
-	 * @param pte Reference to page table entry.
-	 * @param flags Access flags to validate, see @ref PAGE_ACCESS_FLAGS.
-	 *
-	 * @return True if entry is valid.
-	 */
-	bool (*entry_valid)(pt_entry_t pte, unsigned long flags);
+    /**
+     * Returns true if entry is a valid and supports the provided access
+     * flags (terminal and non-terminal entries).
+     * @param pte Reference to page table entry.
+     * @param flags Access flags to validate, see @ref PAGE_ACCESS_FLAGS.
+     *
+     * @return True if entry is valid.
+     */
+    bool (*entry_valid)(pt_entry_t pte, unsigned long flags);
 
-	/**
-	 * Set terminal entry to physical address and access flags.
-	 * @param pte Reference to page table entry.
-	 * @param phys Target physical address.
-	 * @param flags Flags of permitted access, see @ref PAGE_ACCESS_FLAGS.
-	 */
-	void (*set_terminal)(pt_entry_t pte, unsigned long phys,
-			     unsigned long flags);
-	/**
-	 * Extract physical address from given entry.
-	 * @param pte Reference to page table entry.
-	 * @param virt Virtual address to look up.
-	 *
-	 * @return Physical address or @c INVALID_PHYS_ADDR if entry it not
-	 * 	   terminal.
-	 */
-	unsigned long (*get_phys)(pt_entry_t pte, unsigned long virt);
-	/**
-	 * Extract access flags from given entry.
-	 * @param pte Reference to page table entry.
-	 *
-	 * @return Access flags, see @ref PAGE_ACCESS_FLAGS.
-	 *
-	 * @note Only valid for terminal entries.
-	 */
-	unsigned long (*get_flags)(pt_entry_t pte);
+    /**
+     * Set terminal entry to physical address and access flags.
+     * @param pte Reference to page table entry.
+     * @param phys Target physical address.
+     * @param flags Flags of permitted access, see @ref PAGE_ACCESS_FLAGS.
+     */
+    void (*set_terminal)(pt_entry_t pte, unsigned long phys,
+                         unsigned long flags);
+    /**
+     * Extract physical address from given entry.
+     * @param pte Reference to page table entry.
+     * @param virt Virtual address to look up.
+     *
+     * @return Physical address or @c INVALID_PHYS_ADDR if entry it not
+     *     terminal.
+     */
+    unsigned long (*get_phys)(pt_entry_t pte, unsigned long virt);
+    /**
+     * Extract access flags from given entry.
+     * @param pte Reference to page table entry.
+     *
+     * @return Access flags, see @ref PAGE_ACCESS_FLAGS.
+     *
+     * @note Only valid for terminal entries.
+     */
+    unsigned long (*get_flags)(pt_entry_t pte);
 
-	/**
-	 * Set entry to physical address of next-level page table.
-	 * @param pte Reference to page table entry.
-	 * @param next_pt Reference to page table of next level.
-	 */
-	void (*set_next_pt)(pt_entry_t pte, unsigned long next_pt);
-	/**
-	 * Get physical address of next-level page table from entry.
-	 * @param pte Reference to page table entry.
-	 *
-	 * @return Physical address.
-	 *
-	 * @note Only valid for non-terminal entries.
-	 */
-	unsigned long (*get_next_pt)(pt_entry_t pte);
+    /**
+     * Set entry to physical address of next-level page table.
+     * @param pte Reference to page table entry.
+     * @param next_pt Reference to page table of next level.
+     */
+    void (*set_next_pt)(pt_entry_t pte, unsigned long next_pt);
+    /**
+     * Get physical address of next-level page table from entry.
+     * @param pte Reference to page table entry.
+     *
+     * @return Physical address.
+     *
+     * @note Only valid for non-terminal entries.
+     */
+    unsigned long (*get_next_pt)(pt_entry_t pte);
 
-	/**
-	 * Invalidate entry.
-	 * @param pte Reference to page table entry.
-	 */
-	void (*clear_entry)(pt_entry_t pte);
+    /**
+     * Invalidate entry.
+     * @param pte Reference to page table entry.
+     */
+    void (*clear_entry)(pt_entry_t pte);
 
-	/**
-	 * Returns true if given page table contains no valid entries.
-	 * @param page_table Reference to page table.
-	 *
-	 * @return True if table is empty.
-	 */
-	bool (*page_table_empty)(page_table_t page_table);
+    /**
+     * Returns true if given page table contains no valid entries.
+     * @param page_table Reference to page table.
+     *
+     * @return True if table is empty.
+     */
+    bool (*page_table_empty)(page_table_t page_table);
 };
 
 /** Describes the root of hierarchical paging structures. */
-struct paging_structures {
-	/** True if used for hypervisor itself. */
-	bool hv_paging;
-	/** Pointer to array of paging parameters and callbacks, first element
-	 * describing the root level, NULL if paging is disabled. */
-	const struct paging *root_paging;
-	/** Reference to root-level page table, ignored if root_paging is NULL.
-	 */
-	page_table_t root_table;
+struct paging_structures
+{
+    /** True if used for hypervisor itself. */
+    bool hv_paging;
+    /** Pointer to array of paging parameters and callbacks, first element
+     * describing the root level, NULL if paging is disabled. */
+    const struct paging *root_paging;
+    /** Reference to root-level page table, ignored if root_paging is NULL.
+     */
+    page_table_t root_table;
 };
 
 /**
  * Describes the root of hierarchical paging structures managed by a guest
  * (cell).
  */
-struct guest_paging_structures {
-	/** Pointer to array of paging parameters and callbacks, first element
-	 * describing the root level. */
-	const struct paging *root_paging;
-	/** Guest-physical address of the root-level page table. */
-	unsigned long root_table_gphys;
+struct guest_paging_structures
+{
+    /** Pointer to array of paging parameters and callbacks, first element
+     * describing the root level. */
+    const struct paging *root_paging;
+    /** Guest-physical address of the root-level page table. */
+    unsigned long root_table_gphys;
 };
 
 #include <asm/paging_modes.h>
@@ -217,7 +221,7 @@ void page_free(struct page_pool *pool, void *first_page, unsigned int num);
 
 /**
  * Translate virtual hypervisor address to physical address.
- * @param hvirt		Virtual address in hypervisor address space.
+ * @param hvirt     Virtual address in hypervisor address space.
  *
  * @return Corresponding physical address.
  *
@@ -227,12 +231,12 @@ void page_free(struct page_pool *pool, void *first_page, unsigned int num);
  */
 static inline unsigned long paging_hvirt2phys(const volatile void *hvirt)
 {
-	return (unsigned long)hvirt - page_offset;
+    return (unsigned long)hvirt - page_offset;
 }
 
 /**
  * Translate physical address to virtual hypervisor address.
- * @param phys		Physical address to translate.
+ * @param phys      Physical address to translate.
  *
  * @return Corresponding virtual address in hypervisor address space.
  *
@@ -242,20 +246,20 @@ static inline unsigned long paging_hvirt2phys(const volatile void *hvirt)
  */
 static inline void *paging_phys2hvirt(unsigned long phys)
 {
-	return (void *)phys + page_offset;
+    return (void *)phys + page_offset;
 }
 
 unsigned long paging_virt2phys(const struct paging_structures *pg_structs,
-			       unsigned long virt, unsigned long flags);
+                               unsigned long virt, unsigned long flags);
 
 /**
  * Translate guest-physical (cell) address into host-physical address.
- * @param gphys		Guest-physical address to translate.
- * @param flags		Access flags to validate during the translation.
+ * @param gphys     Guest-physical address to translate.
+ * @param flags     Access flags to validate during the translation.
  *
  * @return Corresponding physical address or @c INVALID_PHYS_ADDR if the
- * 	   guest-physical address could not be translated or the requested
- * 	   access is not supported by the mapping.
+ *     guest-physical address could not be translated or the requested
+ *     access is not supported by the mapping.
  *
  * @see paging_phys2hvirt
  * @see paging_hvirt2phys
@@ -264,21 +268,21 @@ unsigned long paging_virt2phys(const struct paging_structures *pg_structs,
 unsigned long arch_paging_gphys2phys(unsigned long gphys, unsigned long flags);
 
 int paging_create(const struct paging_structures *pg_structs,
-		  unsigned long phys, unsigned long size, unsigned long virt,
-		  unsigned long access_flags, unsigned long paging_flags);
+                  unsigned long phys, unsigned long size, unsigned long virt,
+                  unsigned long access_flags, unsigned long paging_flags);
 int paging_destroy(const struct paging_structures *pg_structs,
-		   unsigned long virt, unsigned long size,
-		   unsigned long paging_flags);
+                   unsigned long virt, unsigned long size,
+                   unsigned long paging_flags);
 
 void *paging_map_device(unsigned long phys, unsigned long size);
 void paging_unmap_device(unsigned long phys, void *virt, unsigned long size);
 
 int paging_create_hvpt_link(const struct paging_structures *pg_dest_structs,
-			    unsigned long virt);
+                            unsigned long virt);
 
 void *paging_get_guest_pages(const struct guest_paging_structures *pg_structs,
-			     unsigned long gaddr, unsigned int num,
-			     unsigned long flags);
+                             unsigned long gaddr, unsigned int num,
+                             unsigned long flags);
 
 int paging_map_all_per_cpu(unsigned int cpu, bool enable);
 

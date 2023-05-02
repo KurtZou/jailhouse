@@ -38,9 +38,9 @@
 
 #include <inmate.h>
 
-#define X2APIC_SPIV		0x80f
+#define X2APIC_SPIV     0x80f
 
-#define APIC_EOI_ACK		0
+#define APIC_EOI_ACK        0
 
 extern u8 irq_entry[];
 
@@ -48,94 +48,95 @@ static irq_handler_t __attribute__((used)) irq_handler;
 
 void irq_init(irq_handler_t handler)
 {
-	unsigned int vector;
-	u64 entry;
+    unsigned int vector;
+    u64 entry;
 
-	write_msr(X2APIC_SPIV, 0x1ff);
+    write_msr(X2APIC_SPIV, 0x1ff);
 
-	irq_handler = handler;
+    irq_handler = handler;
 
-	for (vector = 32; vector < 32 + MAX_INTERRUPT_VECTORS; vector++) {
-		entry = (unsigned long)irq_entry + (vector - 32) * 16;
-		idt[vector * 2] = (entry & 0xffff) | (INMATE_CS64 << 16) |
-			((0x8e00 | (entry & 0xffff0000)) << 32);
-		idt[vector * 2 + 1] = entry >> 32;
-	}
+    for (vector = 32; vector < 32 + MAX_INTERRUPT_VECTORS; vector++)
+    {
+        entry = (unsigned long)irq_entry + (vector - 32) * 16;
+        idt[vector * 2] = (entry & 0xffff) | (INMATE_CS64 << 16) |
+                          ((0x8e00 | (entry & 0xffff0000)) << 32);
+        idt[vector * 2 + 1] = entry >> 32;
+    }
 }
 
 asm(
-".macro eoi\n\t"
-	/* write 0 as ack to x2APIC EOI register (0x80b) */
-	"xor %eax,%eax\n\t"
-	"xor %edx,%edx\n\t"
-	"mov $0x80b,%ecx\n\t"
-	"wrmsr\n"
-".endm\n"
+    ".macro eoi\n\t"
+    /* write 0 as ack to x2APIC EOI register (0x80b) */
+    "xor %eax,%eax\n\t"
+    "xor %edx,%edx\n\t"
+    "mov $0x80b,%ecx\n\t"
+    "wrmsr\n"
+    ".endm\n"
 
-".macro irq_prologue irq\n\t"
+    ".macro irq_prologue irq\n\t"
 #ifdef __x86_64__
-	"push %rdi\n\t"
-	"mov $irq,%rdi\n\t"
+    "push %rdi\n\t"
+    "mov $irq,%rdi\n\t"
 #else
-	"push %ecx\n\t"
-	"mov $irq,%ecx\n\t"
+    "push %ecx\n\t"
+    "mov $irq,%ecx\n\t"
 #endif
-	"jmp irq_common\n"
-	".balign 16\n"
-".endm\n\t"
+    "jmp irq_common\n"
+    ".balign 16\n"
+    ".endm\n\t"
 
-	".global irq_entry\n\t"
-	".balign 16\n"
-"irq_entry:\n"
-"irq=32\n"
-".rept 32\n"
-	"irq_prologue irq\n\t"
-	"irq=irq+1\n\t"
-".endr\n"
+    ".global irq_entry\n\t"
+    ".balign 16\n"
+    "irq_entry:\n"
+    "irq=32\n"
+    ".rept 32\n"
+    "irq_prologue irq\n\t"
+    "irq=irq+1\n\t"
+    ".endr\n"
 
-"irq_common:\n\t"
+    "irq_common:\n\t"
 #ifdef __x86_64__
-	"push %rax\n\t"
-	"push %rcx\n\t"
-	"push %rdx\n\t"
-	"push %rsi\n\t"
-	"push %r8\n\t"
-	"push %r9\n\t"
-	"push %r10\n\t"
-	"push %r11\n\t"
+    "push %rax\n\t"
+    "push %rcx\n\t"
+    "push %rdx\n\t"
+    "push %rsi\n\t"
+    "push %r8\n\t"
+    "push %r9\n\t"
+    "push %r10\n\t"
+    "push %r11\n\t"
 
-	"call *irq_handler\n\t"
+    "call *irq_handler\n\t"
 
-	"eoi\n\t"
+    "eoi\n\t"
 
-	"pop %r11\n\t"
-	"pop %r10\n\t"
-	"pop %r9\n\t"
-	"pop %r8\n\t"
-	"pop %rsi\n\t"
-	"pop %rdx\n\t"
-	"pop %rcx\n\t"
-	"pop %rax\n\t"
-	"pop %rdi\n\t"
+    "pop %r11\n\t"
+    "pop %r10\n\t"
+    "pop %r9\n\t"
+    "pop %r8\n\t"
+    "pop %rsi\n\t"
+    "pop %rdx\n\t"
+    "pop %rcx\n\t"
+    "pop %rax\n\t"
+    "pop %rdi\n\t"
 
-	"iretq"
+    "iretq"
 #else
-	"push %eax\n\t"
-	"push %edx\n\t"
-	"push %esi\n\t"
-	"push %edi\n\t"
+    "push %eax\n\t"
+    "push %edx\n\t"
+    "push %esi\n\t"
+    "push %edi\n\t"
 
-	"call *irq_handler\n\t"
+    "call *irq_handler\n\t"
 
-	"eoi\n\t"
+    "eoi\n\t"
 
-	"pop %edi\n\t"
-	"pop %esi\n\t"
-	"pop %edx\n\t"
-	"pop %eax\n\t"
-	"pop %ecx\n\t"
+    "pop %edi\n\t"
+    "pop %esi\n\t"
+    "pop %edx\n\t"
+    "pop %eax\n\t"
+    "pop %ecx\n\t"
 
-	"iret"
+    "iret"
 #endif
 );
 
@@ -145,5 +146,5 @@ void irq_enable(unsigned int irq)
 
 void irq_send_ipi(unsigned int cpu_id, unsigned int vector)
 {
-	write_msr(X2APIC_ICR, ((u64)cpu_id << 32) | APIC_LVL_ASSERT | vector);
+    write_msr(X2APIC_ICR, ((u64)cpu_id << 32) | APIC_LVL_ASSERT | vector);
 }

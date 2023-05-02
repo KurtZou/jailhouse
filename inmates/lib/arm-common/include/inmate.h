@@ -39,8 +39,8 @@
 #ifndef _JAILHOUSE_INMATE_H
 #define _JAILHOUSE_INMATE_H
 
-#define COMM_REGION_BASE	0x80000000
-#define PAGE_SIZE	(4 * 1024ULL)
+#define COMM_REGION_BASE    0x80000000
+#define PAGE_SIZE   (4 * 1024ULL)
 
 typedef signed char s8;
 typedef unsigned char u8;
@@ -56,43 +56,43 @@ typedef unsigned long long u64;
 
 static inline u8 mmio_read8(void *address)
 {
-	return *(volatile u8 *)address;
+    return *(volatile u8 *)address;
 }
 
 static inline void mmio_write8(void *address, u8 value)
 {
-	*(volatile u8 *)address = value;
+    *(volatile u8 *)address = value;
 }
 
 static inline u16 mmio_read16(void *address)
 {
-	return *(volatile u16 *)address;
+    return *(volatile u16 *)address;
 }
 
 static inline void mmio_write16(void *address, u16 value)
 {
-	*(volatile u16 *)address = value;
+    *(volatile u16 *)address = value;
 }
 
 static inline u32 mmio_read32(void *address)
 {
-	return *(volatile u32 *)address;
+    return *(volatile u32 *)address;
 }
 
 static inline void mmio_write32(void *address, u32 value)
 {
-	*(volatile u32 *)address = value;
+    *(volatile u32 *)address = value;
 }
 
 static inline u64 mmio_read64(void *address)
 {
-	return *(volatile u64 *)address;
+    return *(volatile u64 *)address;
 }
 
 static inline void __attribute__((noreturn)) halt(void)
 {
-	while (1)
-		asm volatile("wfi" : : : "memory");
+    while (1)
+        asm volatile("wfi" : : : "memory");
 }
 
 unsigned long timer_get_frequency(void);

@@ -18,14 +18,14 @@ void common(void);
 
 void common(void)
 {
-	OFFSET(PERCPU_LINUX_SP, per_cpu, linux_sp);
-	BLANK();
+    OFFSET(PERCPU_LINUX_SP, per_cpu, linux_sp);
+    BLANK();
 
-	/* GCC evaluates constant expressions involving built-ins
-	 * at compilation time, so this yields computed value.
-	 */
-	DEFINE(PERCPU_STACK_END,
-	       __builtin_offsetof(struct per_cpu, stack) + \
-	       FIELD_SIZEOF(struct per_cpu, stack));
-	DEFINE(PERCPU_SIZE_ASM, sizeof(struct per_cpu));
+    /* GCC evaluates constant expressions involving built-ins
+     * at compilation time, so this yields computed value.
+     */
+    DEFINE(PERCPU_STACK_END,
+           __builtin_offsetof(struct per_cpu, stack) + \
+           FIELD_SIZEOF(struct per_cpu, stack));
+    DEFINE(PERCPU_SIZE_ASM, sizeof(struct per_cpu));
 }

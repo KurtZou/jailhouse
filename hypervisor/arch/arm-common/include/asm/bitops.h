@@ -15,29 +15,29 @@
 static inline __attribute__((always_inline)) int
 test_bit(unsigned int nr, const volatile unsigned long *addr)
 {
-	return ((1UL << (nr % BITS_PER_LONG)) &
-		(addr[nr / BITS_PER_LONG])) != 0;
+    return ((1UL << (nr % BITS_PER_LONG)) &
+            (addr[nr / BITS_PER_LONG])) != 0;
 }
 
 /* Count leading zeroes */
 static inline unsigned long clz(unsigned long word)
 {
-	unsigned long val;
+    unsigned long val;
 
-	asm volatile ("clz %0, %1" : "=r" (val) : "r" (word));
-	return val;
+    asm volatile ("clz %0, %1" : "=r" (val) : "r" (word));
+    return val;
 }
 
 /* Returns the position of the least significant 1, MSB=31, LSB=0*/
 static inline unsigned long ffsl(unsigned long word)
 {
-	if (!word)
-		return 0;
-	asm volatile ("rbit %0, %0" : "+r" (word));
-	return clz(word);
+    if (!word)
+        return 0;
+    asm volatile ("rbit %0, %0" : "+r" (word));
+    return clz(word);
 }
 
 static inline unsigned long ffzl(unsigned long word)
 {
-	return ffsl(~word);
+    return ffsl(~word);
 }

@@ -19,32 +19,33 @@
 
 void arch_dbg_write_init(void)
 {
-	unsigned char con_type = system_config->debug_console.type;
+    unsigned char con_type = system_config->debug_console.type;
 
-	if (!CON_IS_MMIO(system_config->debug_console.flags))
-		return;
+    if (!CON_IS_MMIO(system_config->debug_console.flags))
+        return;
 
-	if (con_type == JAILHOUSE_CON_TYPE_PL011)
-		uart = &uart_pl011_ops;
-	else if (con_type == JAILHOUSE_CON_TYPE_8250)
-		uart = &uart_8250_ops;
-	else if (con_type == JAILHOUSE_CON_TYPE_XUARTPS)
-		uart = &uart_xuartps_ops;
-	else if (con_type == JAILHOUSE_CON_TYPE_MVEBU)
-		uart = &uart_mvebu_ops;
-	else if (con_type == JAILHOUSE_CON_TYPE_HSCIF)
-		uart = &uart_hscif_ops;
-	else if (con_type == JAILHOUSE_CON_TYPE_SCIFA)
-		uart = &uart_scifa_ops;
-	else if (con_type == JAILHOUSE_CON_TYPE_IMX)
-		uart = &uart_imx_ops;
-	else if (con_type == JAILHOUSE_CON_TYPE_IMX_LPUART)
-		uart = &uart_imx_lpuart_ops;
+    if (con_type == JAILHOUSE_CON_TYPE_PL011)
+        uart = &uart_pl011_ops;
+    else if (con_type == JAILHOUSE_CON_TYPE_8250)
+        uart = &uart_8250_ops;
+    else if (con_type == JAILHOUSE_CON_TYPE_XUARTPS)
+        uart = &uart_xuartps_ops;
+    else if (con_type == JAILHOUSE_CON_TYPE_MVEBU)
+        uart = &uart_mvebu_ops;
+    else if (con_type == JAILHOUSE_CON_TYPE_HSCIF)
+        uart = &uart_hscif_ops;
+    else if (con_type == JAILHOUSE_CON_TYPE_SCIFA)
+        uart = &uart_scifa_ops;
+    else if (con_type == JAILHOUSE_CON_TYPE_IMX)
+        uart = &uart_imx_ops;
+    else if (con_type == JAILHOUSE_CON_TYPE_IMX_LPUART)
+        uart = &uart_imx_lpuart_ops;
 
-	if (uart) {
-		uart->debug_console = &system_config->debug_console;
-		uart->virt_base = hypervisor_header.debug_console_base;
-		uart->init(uart);
-		arch_dbg_write = uart_write;
-	}
+    if (uart)
+    {
+        uart->debug_console = &system_config->debug_console;
+        uart->virt_base = hypervisor_header.debug_console_base;
+        uart->init(uart);
+        arch_dbg_write = uart_write;
+    }
 }

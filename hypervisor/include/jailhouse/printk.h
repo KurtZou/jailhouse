@@ -17,12 +17,12 @@ void __attribute__((format(printf, 1, 2))) printk(const char *fmt, ...);
 void __attribute__((format(printf, 1, 2))) panic_printk(const char *fmt, ...);
 
 #ifdef CONFIG_TRACE_ERROR
-#define trace_error(code) ({						  \
-	printk("%s:%d: returning error %s\n", __FILE__, __LINE__, #code); \
-	code;								  \
+#define trace_error(code) ({                          \
+    printk("%s:%d: returning error %s\n", __FILE__, __LINE__, #code); \
+    code;                                 \
 })
 #else /* !CONFIG_TRACE_ERROR */
-#define trace_error(code)	code
+#define trace_error(code)   code
 #endif /* !CONFIG_TRACE_ERROR */
 
 void arch_dbg_write_init(void);

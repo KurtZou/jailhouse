@@ -43,16 +43,16 @@ unsigned long heap_pos = (unsigned long)stack_top;
 
 void *alloc(unsigned long size, unsigned long align)
 {
-	unsigned long base = (heap_pos + align - 1) & ~(align - 1);
+    unsigned long base = (heap_pos + align - 1) & ~(align - 1);
 
-	heap_pos = base + size;
-	return (void *)base;
+    heap_pos = base + size;
+    return (void *)base;
 }
 
 void *zalloc(unsigned long size, unsigned long align)
 {
-	void *base = alloc(size, align);
-	memset(base, 0, size);
+    void *base = alloc(size, align);
+    memset(base, 0, size);
 
-	return base;
+    return base;
 }

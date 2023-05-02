@@ -18,11 +18,12 @@ bool all_passed = true;
 
 void __evaluate(u64 a, u64 b, int line)
 {
-	bool passed = (a == b);
+    bool passed = (a == b);
 
-	printk("Test at line #%d %s\n", line, passed ? "passed" : "FAILED");
-	if (!passed) {
-		printk(" %llx != %llx\n", (u64)a, (u64)b);
-		all_passed = false;
-	}
+    printk("Test at line #%d %s\n", line, passed ? "passed" : "FAILED");
+    if (!passed)
+    {
+        printk(" %llx != %llx\n", (u64)a, (u64)b);
+        all_passed = false;
+    }
 }

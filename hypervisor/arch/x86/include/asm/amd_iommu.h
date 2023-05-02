@@ -20,14 +20,14 @@
 
 #include <jailhouse/cell-config.h>
 
-#define AMD_IOMMU_PTE_P			(1ULL <<  0)
-#define AMD_IOMMU_PTE_PG_MODE(level)	((level) << 9)
-#define AMD_IOMMU_PTE_PG_MODE_MASK	BIT_MASK(11, 9)
-#define AMD_IOMMU_PTE_IR		(1ULL << 61)
-#define AMD_IOMMU_PTE_IW		(1ULL << 62)
+#define AMD_IOMMU_PTE_P         (1ULL <<  0)
+#define AMD_IOMMU_PTE_PG_MODE(level)    ((level) << 9)
+#define AMD_IOMMU_PTE_PG_MODE_MASK  BIT_MASK(11, 9)
+#define AMD_IOMMU_PTE_IR        (1ULL << 61)
+#define AMD_IOMMU_PTE_IW        (1ULL << 62)
 
-#define AMD_IOMMU_PAGE_DEFAULT_FLAGS	(AMD_IOMMU_PTE_IW | AMD_IOMMU_PTE_IR | \
-					 AMD_IOMMU_PTE_P)
+#define AMD_IOMMU_PAGE_DEFAULT_FLAGS    (AMD_IOMMU_PTE_IW | AMD_IOMMU_PTE_IR | \
+                     AMD_IOMMU_PTE_P)
 
 u64 amd_iommu_get_memory_region_flags(const struct jailhouse_memory *mem);
 

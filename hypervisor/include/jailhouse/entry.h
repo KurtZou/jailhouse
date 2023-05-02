@@ -18,17 +18,17 @@
 
 #include <jailhouse/cell-config.h>
 
-#define EPERM		1
-#define ENOENT		2
-#define EIO		5
-#define E2BIG		7
-#define ENOMEM		12
-#define EBUSY		16
-#define EEXIST		17
-#define ENODEV		19
-#define EINVAL		22
-#define ERANGE		34
-#define ENOSYS		38
+#define EPERM       1
+#define ENOENT      2
+#define EIO     5
+#define E2BIG       7
+#define ENOMEM      12
+#define EBUSY       16
+#define EEXIST      17
+#define ENODEV      19
+#define EINVAL      22
+#define ERANGE      34
+#define ENOSYS      38
 
 struct per_cpu;
 struct cell;
@@ -45,7 +45,7 @@ extern struct jailhouse_header hypervisor_header;
 
 /**
  * Architecture-specific entry point for enabling the hypervisor.
- * @param cpu_id	Logical ID of the calling CPU.
+ * @param cpu_id    Logical ID of the calling CPU.
  *
  * @return 0 on success, negative error code otherwise.
  *
@@ -61,8 +61,8 @@ int arch_entry(unsigned int cpu_id);
 
 /**
  * Entry point for enabling the hypervisor.
- * @param cpu_id	Logical ID of the calling CPU.
- * @param cpu_data	Data structure of the calling CPU.
+ * @param cpu_id    Logical ID of the calling CPU.
+ * @param cpu_data  Data structure of the calling CPU.
  *
  * @return 0 on success, negative error code otherwise.
  *
@@ -88,7 +88,7 @@ int arch_init_early(void);
 
 /**
  * Perform architecture-specific CPU setup steps.
- * @param cpu_data	Data structure of the calling CPU.
+ * @param cpu_data  Data structure of the calling CPU.
  *
  * @return 0 on success, negative error code otherwise.
  */
@@ -105,8 +105,8 @@ void __attribute__((noreturn)) arch_cpu_activate_vmm(void);
 /**
  * Perform architecture-specific restoration of the CPU state on setup
  * failures or after disabling the hypervisor.
- * @param cpu_id	ID of the calling CPU.
- * @param return_code	Return value to pass to Linux.
+ * @param cpu_id    ID of the calling CPU.
+ * @param return_code   Return value to pass to Linux.
  *
  * @note Depending on the architectural implementation, this function may not
  * return to the caller but rather jump to the target Linux context.

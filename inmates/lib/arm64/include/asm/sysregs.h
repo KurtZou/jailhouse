@@ -43,21 +43,21 @@
 
 #include <string.h>
 
-#define SCTLR_EL1_I	(1 << 12)
-#define SCTLR_EL1_C	(1 << 2)
-#define SCTLR_EL1_M	(1 << 0)
+#define SCTLR_EL1_I (1 << 12)
+#define SCTLR_EL1_C (1 << 2)
+#define SCTLR_EL1_M (1 << 0)
 
-#define SCTLR		SCTLR_EL1
+#define SCTLR       SCTLR_EL1
 
 /* Enable MMU, data+instruction caches */
-#define SCTLR_MMU_CACHES	(SCTLR_EL1_I | SCTLR_EL1_C | SCTLR_EL1_M)
+#define SCTLR_MMU_CACHES    (SCTLR_EL1_I | SCTLR_EL1_C | SCTLR_EL1_M)
 
-#define TCR_EL1_T0SZ_25		25
-#define TCR_EL1_IRGN0_WBWAC	(0x1 << 8)
-#define TCR_EL1_ORGN0_WBWAC	(0x1 << 10)
-#define TCR_EL1_SH0_IS		(0x3 << 12)
-#define TCR_EL1_TG0_4K		(0x0 << 14)
-#define TCR_EL1_IPC_256TB	(0x5UL << 32)
+#define TCR_EL1_T0SZ_25     25
+#define TCR_EL1_IRGN0_WBWAC (0x1 << 8)
+#define TCR_EL1_ORGN0_WBWAC (0x1 << 10)
+#define TCR_EL1_SH0_IS      (0x3 << 12)
+#define TCR_EL1_TG0_4K      (0x0 << 14)
+#define TCR_EL1_IPC_256TB   (0x5UL << 32)
 
 /*
  * IPA size 48bit (256TiB), 4KiB granularity, and set inner/outer caches to
@@ -66,20 +66,20 @@
  */
 #define TRANSL_CONT_REG TCR_EL1
 #define TRANSL_CONT_REG_SETTINGS \
-	TCR_EL1_IPC_256TB | TCR_EL1_TG0_4K | TCR_EL1_SH0_IS | \
-	TCR_EL1_ORGN0_WBWAC | TCR_EL1_IRGN0_WBWAC | TCR_EL1_T0SZ_25
+    TCR_EL1_IPC_256TB | TCR_EL1_TG0_4K | TCR_EL1_SH0_IS | \
+    TCR_EL1_ORGN0_WBWAC | TCR_EL1_IRGN0_WBWAC | TCR_EL1_T0SZ_25
 
-#define MAIR	MAIR_EL1
+#define MAIR    MAIR_EL1
 
-#define TTBR0	TTBR0_EL1
+#define TTBR0   TTBR0_EL1
 
-#define MPIDR	MPIDR_EL1
+#define MPIDR   MPIDR_EL1
 
-#define MPIDR_CPUID_MASK	0xff00ffffffUL
+#define MPIDR_CPUID_MASK    0xff00ffffffUL
 
-#define MPIDR_LEVEL_BITS_SHIFT	3
-#define MPIDR_LEVEL_BITS	(1 << MPIDR_LEVEL_BITS_SHIFT)
-#define MPIDR_LEVEL_MASK	((1 << MPIDR_LEVEL_BITS) - 1)
+#define MPIDR_LEVEL_BITS_SHIFT  3
+#define MPIDR_LEVEL_BITS    (1 << MPIDR_LEVEL_BITS_SHIFT)
+#define MPIDR_LEVEL_MASK    ((1 << MPIDR_LEVEL_BITS) - 1)
 
 #define MPIDR_LEVEL_SHIFT(level) \
         (((1 << (level)) >> 1) << MPIDR_LEVEL_BITS_SHIFT)
@@ -87,14 +87,14 @@
 #define MPIDR_AFFINITY_LEVEL(mpidr, level) \
         (((mpidr) >> MPIDR_LEVEL_SHIFT(level)) & MPIDR_LEVEL_MASK)
 
-#define SYSREG_32(op1, crn, crm, op2)	s3_##op1 ##_##crn ##_##crm ##_##op2
+#define SYSREG_32(op1, crn, crm, op2)   s3_##op1 ##_##crn ##_##crm ##_##op2
 
 #define arm_write_sysreg(sysreg, val) \
-	asm volatile ("msr	"__stringify(sysreg)", %0\n" \
-			: : "r" ((u64)(val)))
+    asm volatile ("msr	"__stringify(sysreg)", %0\n" \
+            : : "r" ((u64)(val)))
 
 #define arm_read_sysreg(sysreg, val) \
-	asm volatile ("mrs	%0,  "__stringify(sysreg)"\n" : "=r" ((val)))
+    asm volatile ("mrs	%0,  "__stringify(sysreg)"\n" : "=r" ((val)))
 
 #include <asm/sysregs_common.h>
 

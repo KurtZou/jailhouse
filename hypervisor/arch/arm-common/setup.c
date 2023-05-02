@@ -16,39 +16,40 @@
 #include <asm/setup.h>
 #include <asm/smccc.h>
 
-static u32 __attribute__((aligned(PAGE_SIZE))) parking_code[PAGE_SIZE / 4] = {
-	ARM_PARKING_CODE
+static u32 __attribute__((aligned(PAGE_SIZE))) parking_code[PAGE_SIZE / 4] =
+{
+    ARM_PARKING_CODE
 };
 
 int arm_init_early(void)
 {
-	int err;
+    int err;
 
-	parking_pt.root_paging = cell_paging;
+    parking_pt.root_paging = cell_paging;
 
-	err = paging_create(&parking_pt, paging_hvirt2phys(parking_code),
-			    PAGE_SIZE, 0,
-			    (PTE_FLAG_VALID | PTE_ACCESS_FLAG |
-			     S2_PTE_ACCESS_RO | S2_PTE_FLAG_NORMAL),
-			    PAGING_COHERENT | PAGING_NO_HUGE);
-	if (err)
-		return err;
+    err = paging_create(&parking_pt, paging_hvirt2phys(parking_code),
+                        PAGE_SIZE, 0,
+                        (PTE_FLAG_VALID | PTE_ACCESS_FLAG |
+                         S2_PTE_ACCESS_RO | S2_PTE_FLAG_NORMAL),
+                        PAGING_COHERENT | PAGING_NO_HUGE);
+    if (err)
+        return err;
 
-	return arm_paging_cell_init(&root_cell);
+    return arm_paging_cell_init(&root_cell);
 }
 
 int arm_cpu_init(struct per_cpu *cpu_data)
 {
-	int err;
+    int err;
 
-	cpu_data->public.mpidr = phys_processor_id();
+    cpu_data->public.mpidr = phys_processor_id();
 
-	arm_write_sysreg(VTCR_EL2, VTCR_CELL);
-	arm_paging_vcpu_init(&root_cell.arch.mm);
+    arm_write_sysreg(VTCR_EL2, VTCR_CELL);
+    arm_paging_vcpu_init(&root_cell.arch.mm);
 
-	err = smccc_discover();
-	if (err)
-		return err;
+    err = smccc_discover();
+    if (err)
+        return err;
 
-	return irqchip_cpu_init(cpu_data);
+    return irqchip_cpu_init(cpu_data);
 }

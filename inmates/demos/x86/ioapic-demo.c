@@ -22,41 +22,41 @@
 
 #include <inmate.h>
 
-#define PM1_STATUS		0
-#define PM1_ENABLE		2
-# define PM1_TMR_EN		(1 << 0)
+#define PM1_STATUS      0
+#define PM1_ENABLE      2
+# define PM1_TMR_EN     (1 << 0)
 
-#define ACPI_GSI		9
+#define ACPI_GSI        9
 
-#define IRQ_VECTOR		32
+#define IRQ_VECTOR      32
 
 static unsigned int pm_base;
 
 static void irq_handler(unsigned int irq)
 {
-	u16 status;
+    u16 status;
 
-	if (irq != IRQ_VECTOR)
-		return;
+    if (irq != IRQ_VECTOR)
+        return;
 
-	status = inw(pm_base + PM1_STATUS);
+    status = inw(pm_base + PM1_STATUS);
 
-	printk("ACPI IRQ received, status: %04x\n", status);
-	outw(status, pm_base);
+    printk("ACPI IRQ received, status: %04x\n", status);
+    outw(status, pm_base);
 }
 
 void inmate_main(void)
 {
-	irq_init(irq_handler);
+    irq_init(irq_handler);
 
-	ioapic_init();
-	ioapic_pin_set_vector(ACPI_GSI, TRIGGER_LEVEL_ACTIVE_HIGH, IRQ_VECTOR);
+    ioapic_init();
+    ioapic_pin_set_vector(ACPI_GSI, TRIGGER_LEVEL_ACTIVE_HIGH, IRQ_VECTOR);
 
-	pm_base = comm_region->pm_timer_address - 8;
-	outw(inw(pm_base + PM1_ENABLE) | PM1_TMR_EN, pm_base + PM1_ENABLE);
+    pm_base = comm_region->pm_timer_address - 8;
+    outw(inw(pm_base + PM1_ENABLE) | PM1_TMR_EN, pm_base + PM1_ENABLE);
 
-	printk("Note: ACPI IRQs are broken for Linux now.\n");
-	asm volatile("sti");
+    printk("Note: ACPI IRQs are broken for Linux now.\n");
+    asm volatile("sti");
 
-	halt();
+    halt();
 }

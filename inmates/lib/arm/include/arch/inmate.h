@@ -40,16 +40,16 @@
  * 4 L1 translation table entries for arm 32 bit architecture
  * indexed from bits [31:30] of virtual address.
  */
-#define JAILHOUSE_INMATE_MEM_PAGE_DIR_LEN	4
+#define JAILHOUSE_INMATE_MEM_PAGE_DIR_LEN   4
 
 void __attribute__((interrupt("IRQ"), used)) vector_irq(void);
 
 static inline void enable_irqs(void)
 {
-	asm volatile("cpsie if"); /* enable IRQs and FIQs */
+    asm volatile("cpsie if"); /* enable IRQs and FIQs */
 }
 
 static inline void disable_irqs(void)
 {
-	asm volatile("cpsid if"); /* disable IRQs and FIQs */
+    asm volatile("cpsid if"); /* disable IRQs and FIQs */
 }

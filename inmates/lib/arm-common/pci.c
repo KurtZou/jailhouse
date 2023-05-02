@@ -40,54 +40,56 @@
 
 void pci_init(void)
 {
-	void *mmcfg = (void *)(unsigned long)comm_region->pci_mmconfig_base;
+    void *mmcfg = (void *)(unsigned long)comm_region->pci_mmconfig_base;
 
-	if (mmcfg)
-		map_range(mmcfg, 0x100000, MAP_UNCACHED);
+    if (mmcfg)
+        map_range(mmcfg, 0x100000, MAP_UNCACHED);
 }
 
 static void *pci_get_device_mmcfg_base(u16 bdf)
 {
-	void *mmcfg = (void *)(unsigned long)comm_region->pci_mmconfig_base;
+    void *mmcfg = (void *)(unsigned long)comm_region->pci_mmconfig_base;
 
-	return mmcfg + ((unsigned long)bdf << 12);
+    return mmcfg + ((unsigned long)bdf << 12);
 }
 
 u32 pci_read_config(u16 bdf, unsigned int addr, unsigned int size)
 {
-	void *cfgaddr = pci_get_device_mmcfg_base(bdf) + addr;
+    void *cfgaddr = pci_get_device_mmcfg_base(bdf) + addr;
 
-	switch (size) {
-	case 1:
-		return mmio_read8(cfgaddr);
-	case 2:
-		return mmio_read16(cfgaddr);
-	case 4:
-		return mmio_read32(cfgaddr);
-	default:
-		return -1;
-	}
+    switch (size)
+    {
+        case 1:
+            return mmio_read8(cfgaddr);
+        case 2:
+            return mmio_read16(cfgaddr);
+        case 4:
+            return mmio_read32(cfgaddr);
+        default:
+            return -1;
+    }
 }
 
 void pci_write_config(u16 bdf, unsigned int addr, u32 value, unsigned int size)
 {
-	void *cfgaddr = pci_get_device_mmcfg_base(bdf) + addr;
+    void *cfgaddr = pci_get_device_mmcfg_base(bdf) + addr;
 
-	switch (size) {
-	case 1:
-		mmio_write8(cfgaddr, value);
-		break;
-	case 2:
-		mmio_write16(cfgaddr, value);
-		break;
-	case 4:
-		mmio_write32(cfgaddr, value);
-		break;
-	}
+    switch (size)
+    {
+        case 1:
+            mmio_write8(cfgaddr, value);
+            break;
+        case 2:
+            mmio_write16(cfgaddr, value);
+            break;
+        case 4:
+            mmio_write32(cfgaddr, value);
+            break;
+    }
 }
 
 void pci_msix_set_vector(u16 bdf, unsigned int vector, u32 index)
 {
-	/* dummy for now, should never be called */
-	*(int *)0xdeaddead = 0;
+    /* dummy for now, should never be called */
+    *(int *)0xdeaddead = 0;
 }

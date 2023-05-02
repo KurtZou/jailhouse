@@ -24,7 +24,7 @@ int strcmp(const char *s1, const char *s2);
  * macro itself.
  */
 
-#define __stringify_1(x...)	#x
-#define __stringify(x...)	__stringify_1(x)
+#define __stringify_1(x...) #x
+#define __stringify(x...)   __stringify_1(x)
 
 #endif

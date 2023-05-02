@@ -19,31 +19,32 @@
 
 #include <asm/processor.h>
 
-typedef struct {
-	u16 owner, next;
+typedef struct
+{
+    u16 owner, next;
 } spinlock_t;
 
 static inline void spin_lock(spinlock_t *lock)
 {
-	register spinlock_t inc = { .next = 1 };
+    register spinlock_t inc = { .next = 1 };
 
-	asm volatile("lock xaddl %0, %1"
-		: "+r" (inc), "+m" (*lock)
-		: : "memory", "cc");
+    asm volatile("lock xaddl %0, %1"
+                 : "+r" (inc), "+m" (*lock)
+                 : : "memory", "cc");
 
-	if (inc.owner != inc.next)
-		while (lock->owner != inc.next)
-			cpu_relax();
+    if (inc.owner != inc.next)
+        while (lock->owner != inc.next)
+            cpu_relax();
 
-	asm volatile("" : : : "memory");
+    asm volatile("" : : : "memory");
 }
 
 static inline void spin_unlock(spinlock_t *lock)
 {
-	asm volatile("addw %1, %0"
-		: "+m" (lock->owner)
-		: "ri" (1)
-		: "memory", "cc");
+    asm volatile("addw %1, %0"
+                 : "+m" (lock->owner)
+                 : "ri" (1)
+                 : "memory", "cc");
 }
 
 #endif /* !_JAILHOUSE_ASM_SPINLOCK_H */

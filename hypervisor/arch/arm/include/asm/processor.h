@@ -19,37 +19,39 @@
 /* also include from arm-common */
 #include_next <asm/processor.h>
 
-#define EXIT_REASON_UNDEF	0x1
-#define EXIT_REASON_HVC		0x2
-#define EXIT_REASON_PABT	0x3
-#define EXIT_REASON_DABT	0x4
-#define EXIT_REASON_TRAP	0x5
-#define EXIT_REASON_IRQ		0x6
-#define EXIT_REASON_FIQ		0x7
+#define EXIT_REASON_UNDEF   0x1
+#define EXIT_REASON_HVC     0x2
+#define EXIT_REASON_PABT    0x3
+#define EXIT_REASON_DABT    0x4
+#define EXIT_REASON_TRAP    0x5
+#define EXIT_REASON_IRQ     0x6
+#define EXIT_REASON_FIQ     0x7
 
-#define NUM_USR_REGS		14
+#define NUM_USR_REGS        14
 
-#define ARM_PARKING_CODE		\
-	0xe320f003, /* 1: wfi  */	\
-	0xeafffffd, /*    b 1b */
+#define ARM_PARKING_CODE        \
+    0xe320f003, /* 1: wfi  */   \
+    0xeafffffd, /*    b 1b */
 
 #ifndef __ASSEMBLY__
 
-union registers {
-	struct {
-		unsigned long exit_reason;
-		/* r0 - r12 and lr. The other registers are banked. */
-		unsigned long usr[NUM_USR_REGS];
-	};
+union registers
+{
+    struct
+    {
+        unsigned long exit_reason;
+        /* r0 - r12 and lr. The other registers are banked. */
+        unsigned long usr[NUM_USR_REGS];
+    };
 };
 
 static inline bool is_el2(void)
 {
-	u32 psr;
+    u32 psr;
 
-	asm volatile ("mrs	%0, cpsr" : "=r" (psr));
+    asm volatile ("mrs	%0, cpsr" : "=r" (psr));
 
-	return (psr & PSR_MODE_MASK) == PSR_HYP_MODE;
+    return (psr & PSR_MODE_MASK) == PSR_HYP_MODE;
 }
 
 #endif /* !__ASSEMBLY__ */

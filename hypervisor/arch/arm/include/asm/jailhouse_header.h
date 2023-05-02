@@ -10,5 +10,5 @@
  * the COPYING file in the top-level directory.
  */
 
-#define JAILHOUSE_BASE			0xf0000000
-#define JAILHOUSE_BORROW_ROOT_PT	1
+#define JAILHOUSE_BASE          0xf0000000
+#define JAILHOUSE_BORROW_ROOT_PT    1

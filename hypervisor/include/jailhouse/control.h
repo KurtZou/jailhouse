@@ -15,10 +15,10 @@
 #include <jailhouse/cell.h>
 #include <jailhouse/cell-config.h>
 
-#define SHUTDOWN_NONE			0
-#define SHUTDOWN_STARTED		1
+#define SHUTDOWN_NONE           0
+#define SHUTDOWN_STARTED        1
 
-#define INVALID_CPU_ID			~(0U)
+#define INVALID_CPU_ID          ~(0U)
 
 extern volatile unsigned long panic_in_progress;
 extern unsigned long panic_cpu;
@@ -36,87 +36,87 @@ extern unsigned long panic_cpu;
 extern struct jailhouse_system *system_config;
 
 unsigned int next_cpu(unsigned int cpu, struct cpu_set *cpu_set,
-		      unsigned int exception);
+                      unsigned int exception);
 
 /**
  * Get the first CPU in a given set.
- * @param set		CPU set.
+ * @param set       CPU set.
  *
  * @return First CPU in set, or max_cpu_id + 1 if the set is empty.
  */
-#define first_cpu(set)		next_cpu(INVALID_CPU_ID, (set), INVALID_CPU_ID)
+#define first_cpu(set)      next_cpu(INVALID_CPU_ID, (set), INVALID_CPU_ID)
 
 /**
  * Loop-generating macro for iterating over all CPUs in a set.
- * @param cpu		Iteration variable holding the current CPU ID
- * 			(unsigned int).
- * @param set		CPU set to iterate over (struct cpu_set).
+ * @param cpu       Iteration variable holding the current CPU ID
+ *          (unsigned int).
+ * @param set       CPU set to iterate over (struct cpu_set).
  *
  * @see for_each_cpu_except
  */
-#define for_each_cpu(cpu, set)	for_each_cpu_except(cpu, set, -1)
+#define for_each_cpu(cpu, set)  for_each_cpu_except(cpu, set, -1)
 
 /**
  * Loop-generating macro for iterating over all CPUs in a set, except the
  * specified one.
- * @param cpu		Iteration variable holding the current CPU ID
- * 			(unsigned int).
- * @param set		CPU set to iterate over (struct cpu_set).
- * @param exception	CPU to skip if it is part of the set.
+ * @param cpu       Iteration variable holding the current CPU ID
+ *          (unsigned int).
+ * @param set       CPU set to iterate over (struct cpu_set).
+ * @param exception CPU to skip if it is part of the set.
  *
  * @see for_each_cpu
  */
-#define for_each_cpu_except(cpu, set, exception)		\
-	for ((cpu) = -1;					\
-	     (cpu) = next_cpu((cpu), (set), (exception)),	\
-	     (cpu) <= (set)->max_cpu_id;			\
-	    )
+#define for_each_cpu_except(cpu, set, exception)        \
+    for ((cpu) = -1;                    \
+         (cpu) = next_cpu((cpu), (set), (exception)),   \
+         (cpu) <= (set)->max_cpu_id;            \
+        )
 
 /**
  * Loop-generating macro for iterating over all registered cells.
- * @param cell		Iteration variable holding the reference to the current
- * 			cell (struct cell *).
+ * @param cell      Iteration variable holding the reference to the current
+ *          cell (struct cell *).
  *
  * @see for_each_non_root_cell
  */
-#define for_each_cell(cell)					\
-	for ((cell) = &root_cell; (cell); (cell) = (cell)->next)
+#define for_each_cell(cell)                 \
+    for ((cell) = &root_cell; (cell); (cell) = (cell)->next)
 
 /**
  * Loop-generating macro for iterating over all registered cells, expect the
  * root cell.
- * @param cell		Iteration variable holding the reference to the current
- * 			cell (struct cell *).
+ * @param cell      Iteration variable holding the reference to the current
+ *          cell (struct cell *).
  *
  * @see for_each_cell
  */
 #define for_each_non_root_cell(cell) \
-	for ((cell) = root_cell.next; (cell); (cell) = (cell)->next)
+    for ((cell) = root_cell.next; (cell); (cell) = (cell)->next)
 
 /**
  * Loop-generating macro for iterating over all memory regions of a
  * configuration.
- * @param mem		Iteration variable holding the reference to the current
- * 			memory region (const struct jailhouse_memory *).
- * @param config	Cell or system configuration containing the regions.
- * @param counter	Helper variable (unsigned int).
+ * @param mem       Iteration variable holding the reference to the current
+ *          memory region (const struct jailhouse_memory *).
+ * @param config    Cell or system configuration containing the regions.
+ * @param counter   Helper variable (unsigned int).
  */
-#define for_each_mem_region(mem, config, counter)			\
-	for ((mem) = jailhouse_cell_mem_regions(config), (counter) = 0;	\
-	     (counter) < (config)->num_memory_regions;			\
-	     (mem)++, (counter)++)
+#define for_each_mem_region(mem, config, counter)           \
+    for ((mem) = jailhouse_cell_mem_regions(config), (counter) = 0; \
+         (counter) < (config)->num_memory_regions;          \
+         (mem)++, (counter)++)
 
 /**
  * Check if the CPU is assigned to the specified cell.
- * @param cell		Cell the CPU may belong to.
- * @param cpu_id	ID of the CPU.
+ * @param cell      Cell the CPU may belong to.
+ * @param cpu_id    ID of the CPU.
  *
  * @return True if the CPU is assigned to the cell.
  */
 static inline bool cell_owns_cpu(struct cell *cell, unsigned int cpu_id)
 {
-	return (cpu_id <= cell->cpu_set->max_cpu_id &&
-		test_bit(cpu_id, cell->cpu_set->bitmap));
+    return (cpu_id <= cell->cpu_set->max_cpu_id &&
+            test_bit(cpu_id, cell->cpu_set->bitmap));
 }
 
 bool cpu_id_valid(unsigned long cpu_id);
@@ -134,7 +134,7 @@ void panic_park(void);
 
 /**
  * Resume a suspended remote CPU.
- * @param cpu_id	ID of the target CPU.
+ * @param cpu_id    ID of the target CPU.
  *
  * @note This function must not be invoked for the caller's CPU.
  *
@@ -144,7 +144,7 @@ void resume_cpu(unsigned int cpu_id);
 
 /**
  * Reset a suspended remote CPU and resumes its execution.
- * @param cpu_id	ID of the target CPU.
+ * @param cpu_id    ID of the target CPU.
  *
  * Sets the target CPU into the architecture-specific reset set and resumes its
  * execution.
@@ -158,7 +158,7 @@ void arch_reset_cpu(unsigned int cpu_id);
 
 /**
  * Park a suspended remote CPU.
- * @param cpu_id	ID of the target CPU.
+ * @param cpu_id    ID of the target CPU.
  *
  * Parking means that the target CPU does not execute cell code but can handle
  * asynchronous events again. Parking is not implemented as busy-waiting and
@@ -177,7 +177,7 @@ void arch_park_cpu(unsigned int cpu_id);
 
 /**
  * Send internal event to remote CPU.
- * @param cpu_id	ID of the target CPU.
+ * @param cpu_id    ID of the target CPU.
  *
  * When the state of the target CPU was updated and action is required on the
  * remote side, this function can be called. Processing of the state change is
@@ -193,35 +193,35 @@ void arch_send_event(struct public_per_cpu *target_data);
 /**
  * Performs the architecture-specific steps for mapping a memory region into a
  * cell's address space.
- * @param cell		Cell for which the mapping shall be done.
- * @param mem		Memory region to map.
+ * @param cell      Cell for which the mapping shall be done.
+ * @param mem       Memory region to map.
  *
  * @return 0 on success, negative error code otherwise.
  *
  * @see arch_unmap_memory_region
  */
 int arch_map_memory_region(struct cell *cell,
-			   const struct jailhouse_memory *mem);
+                           const struct jailhouse_memory *mem);
 
 /**
  * Performs the architecture-specific steps for unmapping a memory region from
  * a cell's address space.
- * @param cell		Cell for which the unmapping shall be done.
- * @param mem		Memory region to unmap.
+ * @param cell      Cell for which the unmapping shall be done.
+ * @param mem       Memory region to unmap.
  *
  * @return 0 on success, negative error code otherwise.
  *
  * @see arch_map_memory_region
  */
 int arch_unmap_memory_region(struct cell *cell,
-			     const struct jailhouse_memory *mem);
+                             const struct jailhouse_memory *mem);
 
 /**
  * Performs the architecture-specific steps for invalidating memory caches
  * after memory regions have been unmapped from a cell.
  * This function should be called after memory got unmapped or memory access
  * got restricted, and the cell should keep running.
- * @param cell		Cell for which the caches should get flushed
+ * @param cell      Cell for which the caches should get flushed
  *
  * @see public_per_cpu::flush_vcpu_caches
  */
@@ -229,7 +229,7 @@ void arch_flush_cell_vcpu_caches(struct cell *cell);
 
 /**
  * Performs the architecture-specific steps for creating a new cell.
- * @param cell		Data structure of the new cell.
+ * @param cell      Data structure of the new cell.
  *
  * @return 0 on success, negative error code otherwise.
  *
@@ -239,7 +239,7 @@ int arch_cell_create(struct cell *cell);
 
 /**
  * Performs the architecture-specific steps for destroying a cell.
- * @param cell		Cell to be destroyed.
+ * @param cell      Cell to be destroyed.
  *
  * @see arch_cell_create
  */
@@ -247,7 +247,7 @@ void arch_cell_destroy(struct cell *cell);
 
 /**
  * Performs the architecture-specific steps for resetting a cell.
- * @param cell		Cell to be reset.
+ * @param cell      Cell to be reset.
  *
  * @note This function shall not reset individual cell CPUs. Instead, this is
  * triggered by the core via arch_reset_cpu().
@@ -258,8 +258,8 @@ void arch_cell_reset(struct cell *cell);
 
 /**
  * Performs the architecture-specific steps for applying configuration changes.
- * @param cell_added_removed	Cell that was added or removed to/from the
- * 				system or NULL.
+ * @param cell_added_removed    Cell that was added or removed to/from the
+ *              system or NULL.
  *
  * @see config_commit
  * @see pci_config_commit

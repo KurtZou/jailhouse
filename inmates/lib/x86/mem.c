@@ -41,42 +41,49 @@
 
 void map_range(void *start, unsigned long size, enum map_type map_type)
 {
-	unsigned long pt_addr, *pt_entry, *pt;
-	unsigned long vaddr = (unsigned long)start;
+    unsigned long pt_addr, *pt_entry, *pt;
+    unsigned long vaddr = (unsigned long)start;
 
-	pt_addr = read_cr3();
+    pt_addr = read_cr3();
 
-	size += (vaddr & ~HUGE_PAGE_MASK) + HUGE_PAGE_SIZE - 1;
-	size &= HUGE_PAGE_MASK;
-	while (size > 0) {
+    size += (vaddr & ~HUGE_PAGE_MASK) + HUGE_PAGE_SIZE - 1;
+    size &= HUGE_PAGE_MASK;
+    while (size > 0)
+    {
 #ifdef __x86_64__
-		pt_addr &= PAGE_MASK;
-		pt = (unsigned long *)pt_addr;
+        pt_addr &= PAGE_MASK;
+        pt = (unsigned long *)pt_addr;
 
-		pt_entry = &pt[(vaddr >> 39) & 0x1ff];
-		if (*pt_entry & PAGE_FLAG_PRESENT) {
-			pt = (unsigned long *)(*pt_entry & PAGE_MASK);
-		} else {
-			pt = zalloc(PAGE_SIZE, PAGE_SIZE);
-			*pt_entry = (unsigned long)pt | PAGE_DEFAULT_FLAGS;
-		}
+        pt_entry = &pt[(vaddr >> 39) & 0x1ff];
+        if (*pt_entry & PAGE_FLAG_PRESENT)
+        {
+            pt = (unsigned long *)(*pt_entry & PAGE_MASK);
+        }
+        else
+        {
+            pt = zalloc(PAGE_SIZE, PAGE_SIZE);
+            *pt_entry = (unsigned long)pt | PAGE_DEFAULT_FLAGS;
+        }
 
-		pt_entry = &pt[(vaddr >> 30) & 0x1ff];
-		if (*pt_entry & PAGE_FLAG_PRESENT) {
-			pt = (unsigned long *)(*pt_entry & PAGE_MASK);
-		} else {
-			pt = zalloc(PAGE_SIZE, PAGE_SIZE);
-			*pt_entry = (unsigned long)pt | PAGE_DEFAULT_FLAGS;
-		}
+        pt_entry = &pt[(vaddr >> 30) & 0x1ff];
+        if (*pt_entry & PAGE_FLAG_PRESENT)
+        {
+            pt = (unsigned long *)(*pt_entry & PAGE_MASK);
+        }
+        else
+        {
+            pt = zalloc(PAGE_SIZE, PAGE_SIZE);
+            *pt_entry = (unsigned long)pt | PAGE_DEFAULT_FLAGS;
+        }
 
-		pt_entry = &pt[(vaddr >> 21) & 0x1ff];
-		*pt_entry = (vaddr & HUGE_PAGE_MASK) |
-			(map_type == MAP_UNCACHED ? PAGE_FLAG_PCD : 0) |
-			PAGE_FLAG_PS | PAGE_DEFAULT_FLAGS;
+        pt_entry = &pt[(vaddr >> 21) & 0x1ff];
+        *pt_entry = (vaddr & HUGE_PAGE_MASK) |
+                    (map_type == MAP_UNCACHED ? PAGE_FLAG_PCD : 0) |
+                    PAGE_FLAG_PS | PAGE_DEFAULT_FLAGS;
 #else
 #error not yet implemented
 #endif
-		size -= HUGE_PAGE_SIZE;
-		vaddr += HUGE_PAGE_SIZE;
-	}
+        size -= HUGE_PAGE_SIZE;
+        vaddr += HUGE_PAGE_SIZE;
+    }
 }

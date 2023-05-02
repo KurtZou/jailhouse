@@ -15,9 +15,9 @@
 
 #include <jailhouse/types.h>
 
-#define I8042_CMD_REG			0x64
-# define I8042_CMD_WRITE_CTRL_PORT	0xd1
-# define I8042_CMD_PULSE_CTRL_PORT	0xf0
+#define I8042_CMD_REG           0x64
+# define I8042_CMD_WRITE_CTRL_PORT  0xd1
+# define I8042_CMD_PULSE_CTRL_PORT  0xf0
 
 int i8042_access_handler(u16 port, bool dir_in, unsigned int size);
 

@@ -14,30 +14,31 @@
 
 void *memset(void *s, int c, size_t n)
 {
-	u8 *p = s;
+    u8 *p = s;
 
-	while (n-- > 0)
-		*p++ = c;
-	return s;
+    while (n-- > 0)
+        *p++ = c;
+    return s;
 }
 
 int strcmp(const char *s1, const char *s2)
 {
-	while (*s1 == *s2) {
-		if (*s1 == '\0')
-			return 0;
-		s1++;
-		s2++;
-	}
-	return *(unsigned char *)s1 - *(unsigned char *)s2;
+    while (*s1 == *s2)
+    {
+        if (*s1 == '\0')
+            return 0;
+        s1++;
+        s2++;
+    }
+    return *(unsigned char *)s1 - *(unsigned char *)s2;
 }
 
 void *memcpy(void *dest, const void *src, size_t n)
 {
-	const u8 *s = src;
-	u8 *d = dest;
+    const u8 *s = src;
+    u8 *d = dest;
 
-	while (n-- > 0)
-		*d++ = *s++;
-	return dest;
+    while (n-- > 0)
+        *d++ = *s++;
+    return dest;
 }

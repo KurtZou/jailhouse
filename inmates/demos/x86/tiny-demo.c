@@ -14,18 +14,21 @@
 
 void inmate_main(void)
 {
-	unsigned long long start, now;
-	int n;
+    unsigned long long start, now;
+    int n;
 
-	printk("Hello from this tiny cell!\n");
+    printk("Hello from this tiny cell!\n");
 
-	start = pm_timer_read();
-	for (n = 0; n < 10; n++) {
-		do {
-			now = pm_timer_read();
-			cpu_relax();
-		} while (now - start < 1000000000ULL);
-		start += 1000000000ULL;
-		printk("PM Timer: %11llu\n", now);
-	}
+    start = pm_timer_read();
+    for (n = 0; n < 10; n++)
+    {
+        do
+        {
+            now = pm_timer_read();
+            cpu_relax();
+        }
+        while (now - start < 1000000000ULL);
+        start += 1000000000ULL;
+        printk("PM Timer: %11llu\n", now);
+    }
 }

@@ -36,16 +36,16 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#define JAILHOUSE_CALL_INS		".arch_extension virt\n\t" \
-					"hvc #0x4a48"
-#define JAILHOUSE_CALL_NUM_RESULT	"r0"
-#define JAILHOUSE_CALL_ARG1		"r1"
-#define JAILHOUSE_CALL_ARG2		"r2"
-#define JAILHOUSE_CALL_CLOBBERED	"r3"
+#define JAILHOUSE_CALL_INS      ".arch_extension virt\n\t" \
+                    "hvc #0x4a48"
+#define JAILHOUSE_CALL_NUM_RESULT   "r0"
+#define JAILHOUSE_CALL_ARG1     "r1"
+#define JAILHOUSE_CALL_ARG2     "r2"
+#define JAILHOUSE_CALL_CLOBBERED    "r3"
 
 /* CPU statistics, arm-specific part */
-#define JAILHOUSE_CPU_STAT_VMEXITS_CP15		JAILHOUSE_GENERIC_CPU_STATS + 5
-#define JAILHOUSE_NUM_CPU_STATS			JAILHOUSE_GENERIC_CPU_STATS + 6
+#define JAILHOUSE_CPU_STAT_VMEXITS_CP15     JAILHOUSE_GENERIC_CPU_STATS + 5
+#define JAILHOUSE_NUM_CPU_STATS         JAILHOUSE_GENERIC_CPU_STATS + 6
 
 #ifndef __ASSEMBLY__
 typedef __u32 __jh_arg;

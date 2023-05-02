@@ -10,6 +10,7 @@
  * the COPYING file in the top-level directory.
  */
 
-struct arch_ivshmem_irq_cache {
-	u16 id[IVSHMEM_MSIX_VECTORS];
+struct arch_ivshmem_irq_cache
+{
+    u16 id[IVSHMEM_MSIX_VECTORS];
 };

@@ -41,7 +41,8 @@
 
 DECLARE_UART(8250);
 
-struct uart_chip *uart_array[] = {
-	&UART_OPS_NAME(8250),
-	NULL
+struct uart_chip *uart_array[] =
+{
+    &UART_OPS_NAME(8250),
+    NULL
 };

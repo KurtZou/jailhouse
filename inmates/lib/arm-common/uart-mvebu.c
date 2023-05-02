@@ -39,9 +39,9 @@
 #include <inmate.h>
 #include <uart.h>
 
-#define UART_TSH		0x4
-#define UART_STAT		0xc
-#define  UART_STAT_TX_FULL	(1 << 11)
+#define UART_TSH        0x4
+#define UART_STAT       0xc
+#define  UART_STAT_TX_FULL  (1 << 11)
 
 static void uart_mvebu_init(struct uart_chip *chip)
 {
@@ -49,12 +49,12 @@ static void uart_mvebu_init(struct uart_chip *chip)
 
 static bool uart_mvebu_is_busy(struct uart_chip *chip)
 {
-	return !!(mmio_read32(chip->base + UART_STAT) & UART_STAT_TX_FULL);
+    return !!(mmio_read32(chip->base + UART_STAT) & UART_STAT_TX_FULL);
 }
 
 static void uart_mvebu_write(struct uart_chip *chip, char c)
 {
-	mmio_write32(chip->base + UART_TSH, c);
+    mmio_write32(chip->base + UART_TSH, c);
 }
 
 DEFINE_UART(mvebu, "MVEBU", JAILHOUSE_CON_TYPE_MVEBU);

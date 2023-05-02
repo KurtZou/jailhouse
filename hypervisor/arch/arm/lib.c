@@ -17,16 +17,16 @@ unsigned long long __aeabi_llsr(unsigned long long val, unsigned int shift);
 
 unsigned long long __aeabi_llsl(unsigned long long val, unsigned int shift)
 {
-	u32 lo = (u32)val << shift;
-	u32 hi = ((u32)(val >> 32) << shift) | ((u32)val >> (32 - shift));
+    u32 lo = (u32)val << shift;
+    u32 hi = ((u32)(val >> 32) << shift) | ((u32)val >> (32 - shift));
 
-	return ((unsigned long long)hi << 32) | lo;
+    return ((unsigned long long)hi << 32) | lo;
 }
 
 unsigned long long __aeabi_llsr(unsigned long long val, unsigned int shift)
 {
-	u32 lo = ((u32)val >> shift) | ((u32)(val >> 32) << (32 - shift));
-	u32 hi = (u32)val >> shift;
+    u32 lo = ((u32)val >> shift) | ((u32)(val >> 32) << (32 - shift));
+    u32 hi = (u32)val >> shift;
 
-	return ((unsigned long long)hi << 32) | lo;
+    return ((unsigned long long)hi << 32) | lo;
 }

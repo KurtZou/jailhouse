@@ -14,19 +14,19 @@
 
 unsigned int iommu_count_units(void)
 {
-	return 0;
+    return 0;
 }
 
 int iommu_map_memory_region(struct cell *cell,
-			    const struct jailhouse_memory *mem)
+                            const struct jailhouse_memory *mem)
 {
-	return 0;
+    return 0;
 }
 
 int iommu_unmap_memory_region(struct cell *cell,
-			      const struct jailhouse_memory *mem)
+                              const struct jailhouse_memory *mem)
 {
-	return 0;
+    return 0;
 }
 
 void iommu_config_commit(struct cell *cell)

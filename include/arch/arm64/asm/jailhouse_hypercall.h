@@ -36,14 +36,14 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#define JAILHOUSE_CALL_INS		"hvc #0x4a48"
-#define JAILHOUSE_CALL_NUM_RESULT	"x0"
-#define JAILHOUSE_CALL_ARG1		"x1"
-#define JAILHOUSE_CALL_ARG2		"x2"
-#define JAILHOUSE_CALL_CLOBBERED	"x3"
+#define JAILHOUSE_CALL_INS      "hvc #0x4a48"
+#define JAILHOUSE_CALL_NUM_RESULT   "x0"
+#define JAILHOUSE_CALL_ARG1     "x1"
+#define JAILHOUSE_CALL_ARG2     "x2"
+#define JAILHOUSE_CALL_CLOBBERED    "x3"
 
 /* CPU statistics, arm64-specific part */
-#define JAILHOUSE_NUM_CPU_STATS			JAILHOUSE_GENERIC_CPU_STATS + 5
+#define JAILHOUSE_NUM_CPU_STATS         JAILHOUSE_GENERIC_CPU_STATS + 5
 
 #ifndef __ASSEMBLY__
 typedef __u64 __jh_arg;

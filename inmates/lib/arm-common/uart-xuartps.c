@@ -39,9 +39,9 @@
 #include <inmate.h>
 #include <uart.h>
 
-#define UART_SR			0x2c
-#define  UART_SR_TXEMPTY	0x8
-#define UART_FIFO		0x30
+#define UART_SR         0x2c
+#define  UART_SR_TXEMPTY    0x8
+#define UART_FIFO       0x30
 
 static void uart_xuartps_init(struct uart_chip *chip)
 {
@@ -49,12 +49,12 @@ static void uart_xuartps_init(struct uart_chip *chip)
 
 static bool uart_xuartps_is_busy(struct uart_chip *chip)
 {
-	return !(mmio_read32(chip->base + UART_SR) & UART_SR_TXEMPTY);
+    return !(mmio_read32(chip->base + UART_SR) & UART_SR_TXEMPTY);
 }
 
 static void uart_xuartps_write(struct uart_chip *chip, char c)
 {
-	mmio_write32(chip->base + UART_FIFO, c);
+    mmio_write32(chip->base + UART_FIFO, c);
 }
 
 DEFINE_UART(xuartps, "XUARTPS", JAILHOUSE_CON_TYPE_XUARTPS);

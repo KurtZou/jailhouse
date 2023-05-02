@@ -40,16 +40,16 @@
  * 512 L1 translation table entries for arm64 bit architecture
  * indexed from bits [38:30] of virtual address.
  */
-#define JAILHOUSE_INMATE_MEM_PAGE_DIR_LEN	512
+#define JAILHOUSE_INMATE_MEM_PAGE_DIR_LEN   512
 
 void __attribute__((used)) vector_irq(void);
 
 static inline void enable_irqs(void)
 {
-	asm volatile("msr daifclr, #3"); /* enable IRQs and FIQs */
+    asm volatile("msr daifclr, #3"); /* enable IRQs and FIQs */
 }
 
 static inline void disable_irqs(void)
 {
-	asm volatile("msr daifset, #3"); /* disable IRQs and FIQs */
+    asm volatile("msr daifset, #3"); /* disable IRQs and FIQs */
 }

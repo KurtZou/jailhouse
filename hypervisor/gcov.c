@@ -16,21 +16,24 @@ extern unsigned long __init_array_start[], __init_array_end[];
 
 /* the actual data structure is bigger but we just need to know the version
  * independent beginning to link the elements to a list */
-struct gcov_min_info {
-	unsigned int		version;
-	struct gcov_min_info	*next;
+struct gcov_min_info
+{
+    unsigned int        version;
+    struct gcov_min_info    *next;
 };
 
-void gcov_init(void) {
-	unsigned long *iarray = __init_array_start;
-	unsigned long *iarray_end = __init_array_end;
-	void (*__init_func)(void);
+void gcov_init(void)
+{
+    unsigned long *iarray = __init_array_start;
+    unsigned long *iarray_end = __init_array_end;
+    void (*__init_func)(void);
 
-	while (iarray < iarray_end) {
-		__init_func = (void(*)(void))iarray[0];
-		iarray++;
-		__init_func();
-	}
+    while (iarray < iarray_end)
+    {
+        __init_func = (void(*)(void))iarray[0];
+        iarray++;
+        __init_func();
+    }
 }
 
 void __gcov_init(struct gcov_min_info *info);
@@ -41,8 +44,8 @@ void __gcov_exit(void);
  * where a processing tool can find it */
 void __gcov_init(struct gcov_min_info *info)
 {
-	info->next = (struct gcov_min_info *)hypervisor_header.gcov_info_head;
-	hypervisor_header.gcov_info_head = info;
+    info->next = (struct gcov_min_info *)hypervisor_header.gcov_info_head;
+    hypervisor_header.gcov_info_head = info;
 }
 
 /* Satisfy the linker, never called */
