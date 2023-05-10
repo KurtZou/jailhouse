@@ -103,7 +103,7 @@ struct
             .flags = JAILHOUSE_MEM_READ,
         },
         /* IVSHMEM shared memory region */
-        JAILHOUSE_SHMEM_NET_REGIONS(0x5f700000, 0),
+        JAILHOUSE_SHMEM_NET_REGIONS(0x6f700000, 0),
         /* MMIO 1 (permissive) */ {
             .phys_start = 0x01c00000,
             .virt_start = 0x01c00000,
@@ -177,7 +177,7 @@ struct
         /* RAM */ {
             .phys_start = 0x40000000,
             .virt_start = 0x40000000,
-            .size =       0x2f600000,
+            .size =       0x2f620000,
             .flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
             JAILHOUSE_MEM_EXECUTE,
         },
