@@ -16,6 +16,7 @@
 #include <jailhouse/types.h>
 #include <jailhouse/cell-config.h>
 
+<<<<<<< HEAD
 struct
 {
     struct jailhouse_system header;
@@ -66,6 +67,57 @@ struct
             .vpci_irq_base = 108, */
         },
     },
+=======
+struct {
+	struct jailhouse_system header;
+	__u64 cpus[1];
+	struct jailhouse_memory mem_regions[40];
+	struct jailhouse_irqchip irqchips[3];
+	struct jailhouse_pci_device pci_devices[1];
+} __attribute__((packed)) config = {
+	.header = {
+		.signature = JAILHOUSE_SYSTEM_SIGNATURE,
+		.revision = JAILHOUSE_CONFIG_REVISION,
+		.architecture = JAILHOUSE_ARM,
+		.flags = JAILHOUSE_SYS_VIRTUAL_DEBUG_CONSOLE,
+		.hypervisor_memory = {
+			.phys_start = 0xbc000000,
+			.size = 0x4000000,
+		},
+		.debug_console = {
+			.address = 0xe6c50000,
+			.size = 0x1000,
+			.clock_reg = 0xe6150138,
+			.gate_nr = 3,
+			/* .divider = 0x2e, */
+			.type= JAILHOUSE_CON_TYPE_SCIFA,
+			.flags = JAILHOUSE_CON_ACCESS_MMIO |
+				 JAILHOUSE_CON_REGDIST_4 |
+				 JAILHOUSE_CON_INVERTED_GATE,
+		},
+		.platform_info = {
+			/* .pci_mmconfig_base = 0x2000000,
+			.pci_mmconfig_end_bus = 0,
+			.pci_is_virtual = 1, */
+			.arm = {
+				.gic_version = 2,
+				.gicd_base = 0xf1001000,
+				.gicc_base = 0xf1002000,
+				.gich_base = 0xf1004000,
+				.gicv_base = 0xf1006000,
+				.maintenance_irq = 25,
+			},
+		},
+		.root_cell = {
+			.name = "emCON-RZ/G1H",
+			.cpu_set_size = sizeof(config.cpus),
+			.num_memory_regions = ARRAY_SIZE(config.mem_regions),
+			.num_irqchips = ARRAY_SIZE(config.irqchips),
+			/* .num_pci_devices = ARRAY_SIZE(config.pci_devices),
+			.vpci_irq_base = 108, */
+		},
+	},
+>>>>>>> master
 
     .cpus = {
         0xff,

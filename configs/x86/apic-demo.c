@@ -15,6 +15,7 @@
 #include <jailhouse/types.h>
 #include <jailhouse/cell-config.h>
 
+<<<<<<< HEAD
 struct
 {
     struct jailhouse_cell_desc cell;
@@ -29,6 +30,21 @@ struct
         .revision = JAILHOUSE_CONFIG_REVISION,
         .name = "apic-demo",
         .flags = JAILHOUSE_CELL_VIRTUAL_CONSOLE_PERMITTED,
+=======
+struct {
+	struct jailhouse_cell_desc cell;
+	__u64 cpus[1];
+	struct jailhouse_memory mem_regions[2];
+	struct jailhouse_cache cache_regions[1];
+	struct jailhouse_pio pio_regions[3];
+} __attribute__((packed)) config = {
+	.cell = {
+		.signature = JAILHOUSE_CELL_DESC_SIGNATURE,
+		.revision = JAILHOUSE_CONFIG_REVISION,
+		.architecture = JAILHOUSE_X86,
+		.name = "apic-demo",
+		.flags = JAILHOUSE_CELL_VIRTUAL_CONSOLE_PERMITTED,
+>>>>>>> master
 
         .cpu_set_size = sizeof(config.cpus),
         .num_memory_regions = ARRAY_SIZE(config.mem_regions),

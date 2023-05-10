@@ -16,6 +16,7 @@
 #include <jailhouse/types.h>
 #include <jailhouse/cell-config.h>
 
+<<<<<<< HEAD
 struct
 {
     struct jailhouse_system header;
@@ -84,6 +85,75 @@ struct
         },
         .root_cell = {
             .name = "k3-j721e-evm",
+=======
+struct {
+	struct jailhouse_system header;
+	__u64 cpus[1];
+	struct jailhouse_memory mem_regions[40];
+	struct jailhouse_irqchip irqchips[6];
+	struct jailhouse_pci_device pci_devices[2];
+	union jailhouse_stream_id stream_ids[30];
+} __attribute__((packed)) config = {
+	.header = {
+		.signature = JAILHOUSE_SYSTEM_SIGNATURE,
+		.revision = JAILHOUSE_CONFIG_REVISION,
+		.architecture = JAILHOUSE_ARM64,
+		.flags = JAILHOUSE_SYS_VIRTUAL_DEBUG_CONSOLE,
+		.hypervisor_memory = {
+			.phys_start = 0x89fa00000,
+			.size = 0x400000,
+		},
+		.debug_console = {
+			.address = 0x02800000,
+			.size = 0x1000,
+			.type = JAILHOUSE_CON_TYPE_8250,
+			.flags = JAILHOUSE_CON_ACCESS_MMIO |
+				 JAILHOUSE_CON_MDR_QUIRK |
+				 JAILHOUSE_CON_REGDIST_4,
+		},
+		.platform_info = {
+			.pci_mmconfig_base = 0x76000000,
+			.pci_mmconfig_end_bus = 0,
+			.pci_is_virtual = 1,
+			.pci_domain = 4,
+			.iommu_units= {
+				{
+					.type = JAILHOUSE_IOMMU_SMMUV3,
+					.base = 0x36600000,
+					.size = 0x100000,
+				},
+				{
+					.type = JAILHOUSE_IOMMU_PVU,
+					.base = 0x30f80000,
+					.size = 0x1000,
+					.tipvu.tlb_base = 0x36000000,
+					.tipvu.tlb_size = 0x40000,
+				},
+				{
+					.type = JAILHOUSE_IOMMU_PVU,
+					.base = 0x30f81000,
+					.size = 0x1000,
+					.tipvu.tlb_base = 0x36040000,
+					.tipvu.tlb_size = 0x40000,
+				},
+				{
+					.type = JAILHOUSE_IOMMU_PVU,
+					.base = 0x30f83000,
+					.size = 0x1000,
+					.tipvu.tlb_base = 0x360c0000,
+					.tipvu.tlb_size = 0x40000,
+				},
+			},
+			.arm = {
+				.gic_version = 3,
+				.gicd_base = 0x01800000,
+				.gicr_base = 0x01900000,
+				.maintenance_irq = 25,
+			},
+		},
+		.root_cell = {
+			.name = "k3-j721e-evm",
+>>>>>>> master
 
             .cpu_set_size = sizeof(config.cpus),
             .num_memory_regions = ARRAY_SIZE(config.mem_regions),

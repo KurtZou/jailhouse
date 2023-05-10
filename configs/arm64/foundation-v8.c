@@ -15,6 +15,7 @@
 #include <jailhouse/types.h>
 #include <jailhouse/cell-config.h>
 
+<<<<<<< HEAD
 struct
 {
     struct jailhouse_system header;
@@ -39,6 +40,31 @@ struct
             JAILHOUSE_CON_REGDIST_4,
         },
         .platform_info.arm = {
+=======
+struct {
+	struct jailhouse_system header;
+	__u64 cpus[1];
+	struct jailhouse_memory mem_regions[9];
+	struct jailhouse_irqchip irqchips[3];
+} __attribute__((packed)) config = {
+	.header = {
+		.signature = JAILHOUSE_SYSTEM_SIGNATURE,
+		.revision = JAILHOUSE_CONFIG_REVISION,
+		.architecture = JAILHOUSE_ARM64,
+		.flags = JAILHOUSE_SYS_VIRTUAL_DEBUG_CONSOLE,
+		.hypervisor_memory = {
+			.phys_start = 0xfc000000,
+			.size = 0x4000000,
+		},
+		.debug_console = {
+			.address = 0x1c090000,
+			.size = 0x1000,
+			.type = JAILHOUSE_CON_TYPE_PL011,
+			.flags = JAILHOUSE_CON_ACCESS_MMIO |
+				 JAILHOUSE_CON_REGDIST_4,
+		},
+		.platform_info.arm = {
+>>>>>>> master
 #ifdef CONFIG_ARM_GIC_V3
             .gic_version = 3,
             .gicd_base = 0x2f000000,

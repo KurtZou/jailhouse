@@ -823,6 +823,7 @@ struct apic_irq_message
 iommu_get_remapped_root_int(unsigned int iommu, u16 device_id,
                             unsigned int vector, unsigned int remap_index)
 {
+<<<<<<< HEAD
     struct vtd_emulation *unit = &root_cell_units[iommu];
     struct apic_irq_message irq_msg = { .valid = 0 };
     union vtd_irte root_irte;
@@ -860,6 +861,44 @@ iommu_get_remapped_root_int(unsigned int iommu, u16 device_id,
     unit->irte_map[remap_index].used = 1;
 
     return irq_msg;
+=======
+	struct vtd_emulation *unit = &root_cell_units[iommu];
+	struct apic_irq_message irq_msg = { .valid = 0 };
+	union vtd_irte root_irte;
+	unsigned long irte_addr;
+	void *irte_page;
+
+	if (remap_index >= unit->irt_entries)
+		return irq_msg;
+	unit->irte_map[remap_index].used = 0;
+
+	irte_addr = (unit->irta & VTD_IRTA_ADDR_MASK) +
+		remap_index * sizeof(union vtd_irte);
+	irte_page = paging_get_guest_pages(NULL, irte_addr, 1,
+					   PAGE_READONLY_FLAGS);
+	if (!irte_page)
+		return irq_msg;
+
+	root_irte = *(union vtd_irte *)(irte_page +
+					(irte_addr & PAGE_OFFS_MASK));
+
+	irq_msg.valid = root_irte.field.p;
+	irq_msg.vector = root_irte.field.vector;
+	irq_msg.delivery_mode = root_irte.field.delivery_mode;
+	irq_msg.dest_logical = root_irte.field.dest_logical;
+	irq_msg.level_triggered = root_irte.field.level_triggered;
+	irq_msg.redir_hint = root_irte.field.redir_hint;
+	irq_msg.destination = root_irte.field.destination;
+	if (!using_x2apic)
+		/* xAPIC in flat mode: APIC ID in 47:40 (of 63:32) */
+		irq_msg.destination >>= 8;
+
+	unit->irte_map[remap_index].device_id = device_id;
+	unit->irte_map[remap_index].vector = vector;
+	unit->irte_map[remap_index].used = 1;
+
+	return irq_msg;
+>>>>>>> master
 }
 
 int iommu_map_interrupt(struct cell *cell, u16 device_id, unsigned int vector,

@@ -21,6 +21,7 @@
 #define CONFIG_INMATE_BASE 0x0000000
 #endif
 
+<<<<<<< HEAD
 struct
 {
     struct jailhouse_cell_desc cell;
@@ -36,6 +37,22 @@ struct
         .revision = JAILHOUSE_CONFIG_REVISION,
         .name = "k3-j721e-evm-linux-demo",
         .flags = JAILHOUSE_CELL_PASSIVE_COMMREG,
+=======
+struct {
+	struct jailhouse_cell_desc cell;
+	__u64 cpus[1];
+	struct jailhouse_memory mem_regions[22];
+	struct jailhouse_irqchip irqchips[4];
+	struct jailhouse_pci_device pci_devices[2];
+	union jailhouse_stream_id stream_ids[2];
+} __attribute__((packed)) config = {
+	.cell = {
+		.signature = JAILHOUSE_CELL_DESC_SIGNATURE,
+		.revision = JAILHOUSE_CONFIG_REVISION,
+		.architecture = JAILHOUSE_ARM64,
+		.name = "k3-j721e-evm-linux-demo",
+		.flags = JAILHOUSE_CELL_PASSIVE_COMMREG,
+>>>>>>> master
 
         .cpu_set_size = sizeof(config.cpus),
         .num_memory_regions = ARRAY_SIZE(config.mem_regions),

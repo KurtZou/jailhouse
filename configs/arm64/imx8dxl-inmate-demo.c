@@ -25,9 +25,17 @@ struct
         .revision = JAILHOUSE_CONFIG_REVISION,
         .name = "gic-demo",
 #ifdef USE_AARCH32
+<<<<<<< HEAD
         .flags = JAILHOUSE_CELL_PASSIVE_COMMREG | JAILHOUSE_CELL_AARCH32,
 #else
         .flags = JAILHOUSE_CELL_PASSIVE_COMMREG,
+=======
+		.architecture = JAILHOUSE_ARM,
+		.flags = JAILHOUSE_CELL_PASSIVE_COMMREG | JAILHOUSE_CELL_AARCH32,
+#else
+		.architecture = JAILHOUSE_ARM64,
+		.flags = JAILHOUSE_CELL_PASSIVE_COMMREG,
+>>>>>>> master
 #endif
         .cpu_set_size = sizeof(config.cpus),
         .num_memory_regions = ARRAY_SIZE(config.mem_regions),

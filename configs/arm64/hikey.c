@@ -15,6 +15,7 @@
 #include <jailhouse/types.h>
 #include <jailhouse/cell-config.h>
 
+<<<<<<< HEAD
 struct
 {
     struct jailhouse_system header;
@@ -54,6 +55,46 @@ struct
         },
         .root_cell = {
             .name = "HiKey",
+=======
+struct {
+	struct jailhouse_system header;
+	__u64 cpus[1];
+	struct jailhouse_memory mem_regions[8];
+	struct jailhouse_irqchip irqchips[1];
+	struct jailhouse_pci_device pci_devices[1];
+} __attribute__((packed)) config = {
+	.header = {
+		.signature = JAILHOUSE_SYSTEM_SIGNATURE,
+		.revision = JAILHOUSE_CONFIG_REVISION,
+		.architecture = JAILHOUSE_ARM64,
+		.flags = JAILHOUSE_SYS_VIRTUAL_DEBUG_CONSOLE,
+		.hypervisor_memory = {
+			.phys_start = 0x7c000000,
+			.size =       0x04000000,
+		},
+		.debug_console = {
+			.address = 0xf7113000,
+			.size = 0x1000,
+			.type = JAILHOUSE_CON_TYPE_PL011,
+			.flags = JAILHOUSE_CON_ACCESS_MMIO |
+				 JAILHOUSE_CON_REGDIST_4,
+		},
+		.platform_info = {
+			.pci_mmconfig_base = 0xf6000000,
+			.pci_mmconfig_end_bus = 0,
+			.pci_is_virtual = 1,
+			.arm = {
+				.gic_version = 2,
+				.gicd_base = 0xf6801000,
+				.gicc_base = 0xf6802000,
+				.gich_base = 0xf6804000,
+				.gicv_base = 0xf6806000,
+				.maintenance_irq = 25,
+			},
+		},
+		.root_cell = {
+			.name = "HiKey",
+>>>>>>> master
 
             .cpu_set_size = sizeof(config.cpus),
             .num_memory_regions = ARRAY_SIZE(config.mem_regions),

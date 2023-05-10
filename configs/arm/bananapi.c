@@ -15,6 +15,7 @@
 #include <jailhouse/types.h>
 #include <jailhouse/cell-config.h>
 
+<<<<<<< HEAD
 struct
 {
     struct jailhouse_system header;
@@ -57,6 +58,49 @@ struct
         },
         .root_cell = {
             .name = "Banana-Pi",
+=======
+struct {
+	struct jailhouse_system header;
+	__u64 cpus[1];
+	struct jailhouse_memory mem_regions[20];
+	struct jailhouse_irqchip irqchips[1];
+	struct jailhouse_pci_device pci_devices[1];
+} __attribute__((packed)) config = {
+	.header = {
+		.signature = JAILHOUSE_SYSTEM_SIGNATURE,
+		.revision = JAILHOUSE_CONFIG_REVISION,
+		.architecture = JAILHOUSE_ARM,
+		.flags = JAILHOUSE_SYS_VIRTUAL_DEBUG_CONSOLE,
+		.hypervisor_memory = {
+			.phys_start = 0x7c000000,
+			.size = 0x4000000,
+		},
+		.debug_console = {
+			.address = 0x01c28000,
+			.size = 0x1000,
+			/* .clock_reg = 0x01c2006c, */
+			/* .gate_nr = 16 */
+			/* .divider = 0x0d, */
+			.type = JAILHOUSE_CON_TYPE_8250,
+			.flags = JAILHOUSE_CON_ACCESS_MMIO |
+				 JAILHOUSE_CON_REGDIST_4,
+		},
+		.platform_info = {
+			.pci_mmconfig_base = 0x2000000,
+			.pci_mmconfig_end_bus = 0,
+			.pci_is_virtual = 1,
+			.arm = {
+				.gic_version = 2,
+				.gicd_base = 0x01c81000,
+				.gicc_base = 0x01c82000,
+				.gich_base = 0x01c84000,
+				.gicv_base = 0x01c86000,
+				.maintenance_irq = 25,
+			},
+		},
+		.root_cell = {
+			.name = "Banana-Pi",
+>>>>>>> master
 
             .cpu_set_size = sizeof(config.cpus),
             .num_memory_regions = ARRAY_SIZE(config.mem_regions),
