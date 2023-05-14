@@ -156,7 +156,6 @@ void jailhouse_cell_delete_root(void)
 
 int jailhouse_cmd_cell_create(struct jailhouse_cell_create __user *arg)
 {
-<<<<<<< HEAD
     struct jailhouse_cell_create cell_params;
     struct jailhouse_cell_desc *config;
     struct jailhouse_cell_id cell_id;
@@ -239,85 +238,6 @@ int jailhouse_cmd_cell_create(struct jailhouse_cell_create __user *arg)
      * root cell's set. */
     for_each_cpu(cpu, &cell->cpus_assigned)
     {
-=======
-	struct jailhouse_cell_create cell_params;
-	struct jailhouse_cell_desc *config;
-	struct jailhouse_cell_id cell_id;
-	void __user *user_config;
-	struct cell *cell;
-	unsigned int cpu;
-	int err = 0;
-
-	if (copy_from_user(&cell_params, arg, sizeof(cell_params)))
-		return -EFAULT;
-
-	config = kmalloc(cell_params.config_size, GFP_USER | __GFP_NOWARN);
-	if (!config)
-		return -ENOMEM;
-
-	user_config = (void __user *)(unsigned long)cell_params.config_address;
-	if (copy_from_user(config, user_config, cell_params.config_size)) {
-		err = -EFAULT;
-		goto kfree_config_out;
-	}
-
-	if (cell_params.config_size < sizeof(*config) ||
-	    memcmp(config->signature, JAILHOUSE_CELL_DESC_SIGNATURE,
-		   sizeof(config->signature)) != 0) {
-		pr_err("jailhouse: Not a cell configuration\n");
-		err = -EINVAL;
-		goto kfree_config_out;
-	}
-	if (config->revision != JAILHOUSE_CONFIG_REVISION) {
-		pr_err("jailhouse: Configuration revision mismatch\n");
-		err = -EINVAL;
-		goto kfree_config_out;
-	}
-	if (config->architecture != JAILHOUSE_ARCHITECTURE) {
-		pr_err("jailhouse: Configuration architecture mismatch\n");
-		goto kfree_config_out;
-	}
-
-	config->name[JAILHOUSE_CELL_NAME_MAXLEN] = 0;
-
-	/* CONSOLE_ACTIVE implies CONSOLE_PERMITTED for non-root cells */
-	if (CELL_FLAGS_VIRTUAL_CONSOLE_ACTIVE(config->flags))
-		config->flags |= JAILHOUSE_CELL_VIRTUAL_CONSOLE_PERMITTED;
-
-	if (mutex_lock_interruptible(&jailhouse_lock) != 0) {
-		err = -EINTR;
-		goto kfree_config_out;
-	}
-
-	if (!jailhouse_enabled) {
-		err = -EINVAL;
-		goto unlock_out;
-	}
-
-	cell_id.id = JAILHOUSE_CELL_ID_UNUSED;
-	memcpy(cell_id.name, config->name, sizeof(cell_id.name));
-	if (find_cell(&cell_id) != NULL) {
-		err = -EEXIST;
-		goto unlock_out;
-	}
-
-	cell = cell_create(config);
-	if (IS_ERR(cell)) {
-		err = PTR_ERR(cell);
-		goto unlock_out;
-	}
-
-	config->id = cell->id;
-
-	if (!cpumask_subset(&cell->cpus_assigned, &root_cell->cpus_assigned)) {
-		err = -EBUSY;
-		goto error_cell_delete;
-	}
-
-	/* Off-line each CPU assigned to the new cell and remove it from the
-	 * root cell's set. */
-	for_each_cpu(cpu, &cell->cpus_assigned) {
->>>>>>> master
 #ifdef CONFIG_X86
         if (cpu == 0)
         {

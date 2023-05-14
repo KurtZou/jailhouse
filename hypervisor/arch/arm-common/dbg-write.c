@@ -24,7 +24,6 @@ void arch_dbg_write_init(void)
     if (!CON_IS_MMIO(system_config->debug_console.flags))
         return;
 
-<<<<<<< HEAD
     if (con_type == JAILHOUSE_CON_TYPE_PL011)
         uart = &uart_pl011_ops;
     else if (con_type == JAILHOUSE_CON_TYPE_8250)
@@ -41,26 +40,6 @@ void arch_dbg_write_init(void)
         uart = &uart_imx_ops;
     else if (con_type == JAILHOUSE_CON_TYPE_IMX_LPUART)
         uart = &uart_imx_lpuart_ops;
-=======
-	if (con_type == JAILHOUSE_CON_TYPE_PL011)
-		uart = &uart_pl011_ops;
-	else if (con_type == JAILHOUSE_CON_TYPE_8250)
-		uart = &uart_8250_ops;
-	else if (con_type == JAILHOUSE_CON_TYPE_XUARTPS)
-		uart = &uart_xuartps_ops;
-	else if (con_type == JAILHOUSE_CON_TYPE_MVEBU)
-		uart = &uart_mvebu_ops;
-	else if (con_type == JAILHOUSE_CON_TYPE_HSCIF)
-		uart = &uart_hscif_ops;
-	else if (con_type == JAILHOUSE_CON_TYPE_SCIF)
-		uart = &uart_scif_ops;
-	else if (con_type == JAILHOUSE_CON_TYPE_SCIFA)
-		uart = &uart_scifa_ops;
-	else if (con_type == JAILHOUSE_CON_TYPE_IMX)
-		uart = &uart_imx_ops;
-	else if (con_type == JAILHOUSE_CON_TYPE_IMX_LPUART)
-		uart = &uart_imx_lpuart_ops;
->>>>>>> master
 
     if (uart)
     {

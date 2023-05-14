@@ -15,7 +15,6 @@
 #include <jailhouse/types.h>
 #include <jailhouse/cell-config.h>
 
-<<<<<<< HEAD
 struct
 {
     struct jailhouse_system header;
@@ -45,36 +44,6 @@ struct
             .pci_mmconfig_end_bus = 0,
             .pci_is_virtual = 1,
             .pci_domain = 2,
-=======
-struct {
-	struct jailhouse_system header;
-	__u64 cpus[1];
-	struct jailhouse_memory mem_regions[14];
-	struct jailhouse_irqchip irqchips[3];
-	struct jailhouse_pci_device pci_devices[2];
-} __attribute__((packed)) config = {
-	.header = {
-		.signature = JAILHOUSE_SYSTEM_SIGNATURE,
-		.revision = JAILHOUSE_CONFIG_REVISION,
-		.architecture = JAILHOUSE_ARM64,
-		.flags = JAILHOUSE_SYS_VIRTUAL_DEBUG_CONSOLE,
-		.hypervisor_memory = {
-			.phys_start = 0xfdc00000,
-			.size =       0x00400000,
-		},
-		.debug_console = {
-			.address = 0x30860000,
-			.size = 0x1000,
-			.type = JAILHOUSE_CON_TYPE_IMX,
-			.flags = JAILHOUSE_CON_ACCESS_MMIO |
-				 JAILHOUSE_CON_REGDIST_4,
-		},
-		.platform_info = {
-			.pci_mmconfig_base = 0xbfb00000,
-			.pci_mmconfig_end_bus = 0,
-			.pci_is_virtual = 1,
-			.pci_domain = 2,
->>>>>>> master
 
             .arm = {
                 .gic_version = 3,

@@ -378,7 +378,6 @@ console_free_out:
 /* See Documentation/bootstrap-interface.txt */
 static int jailhouse_cmd_enable(struct jailhouse_system __user *arg)
 {
-<<<<<<< HEAD
     const struct firmware *hypervisor;
     struct jailhouse_system config_header;
     struct jailhouse_system *config;
@@ -428,58 +427,6 @@ static int jailhouse_cmd_enable(struct jailhouse_system __user *arg)
     err = -EBUSY;
     if (jailhouse_enabled || !try_module_get(THIS_MODULE))
         goto error_unlock;
-=======
-	const struct firmware *hypervisor;
-	struct jailhouse_system config_header;
-	struct jailhouse_system *config;
-	struct jailhouse_memory *hv_mem = &config_header.hypervisor_memory;
-	struct jailhouse_header *header;
-	unsigned long remap_addr = 0;
-	void __iomem *console = NULL, *clock_reg = NULL;
-	unsigned long config_size;
-	unsigned int clock_gates;
-	const char *fw_name;
-	long max_cpus;
-	int err;
-
-	fw_name = jailhouse_get_fw_name();
-	if (!fw_name) {
-		pr_err("jailhouse: Missing or unsupported HVM technology\n");
-		return -ENODEV;
-	}
-
-	if (copy_from_user(&config_header, arg, sizeof(config_header)))
-		return -EFAULT;
-
-	if (memcmp(config_header.signature, JAILHOUSE_SYSTEM_SIGNATURE,
-		   sizeof(config_header.signature)) != 0) {
-		pr_err("jailhouse: Not a system configuration\n");
-		return -EINVAL;
-	}
-	if (config_header.revision != JAILHOUSE_CONFIG_REVISION) {
-		pr_err("jailhouse: Configuration revision mismatch\n");
-		return -EINVAL;
-	}
-	if (config_header.architecture != JAILHOUSE_ARCHITECTURE) {
-		pr_err("jailhouse: Configuration architecture mismatch\n");
-		return -EINVAL;
-	}
-
-	config_header.root_cell.name[JAILHOUSE_CELL_NAME_MAXLEN] = 0;
-
-	max_cpus = get_max_cpus(config_header.root_cell.cpu_set_size, arg);
-	if (max_cpus < 0)
-		return max_cpus;
-	if (max_cpus > UINT_MAX)
-		return -EINVAL;
-
-	if (mutex_lock_interruptible(&jailhouse_lock) != 0)
-		return -EINTR;
-
-	err = -EBUSY;
-	if (jailhouse_enabled || !try_module_get(THIS_MODULE))
-		goto error_unlock;
->>>>>>> master
 
 #ifdef CONFIG_ARM
     /* open-coded is_hyp_mode_available to use __boot_cpu_mode_sym */

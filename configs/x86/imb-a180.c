@@ -19,7 +19,6 @@
 #include <jailhouse/types.h>
 #include <jailhouse/cell-config.h>
 
-<<<<<<< HEAD
 struct
 {
     struct jailhouse_system header;
@@ -62,49 +61,6 @@ struct
             .num_pci_caps = ARRAY_SIZE(config.pci_caps),
         },
     },
-=======
-struct {
-	struct jailhouse_system header;
-	__u64 cpus[1];
-	struct jailhouse_memory mem_regions[42];
-	struct jailhouse_irqchip irqchips[1];
-	struct jailhouse_pio pio_regions[8];
-	struct jailhouse_pci_device pci_devices[26];
-	struct jailhouse_pci_capability pci_caps[26];
-} __attribute__((packed)) config = {
-	.header = {
-		.signature = JAILHOUSE_SYSTEM_SIGNATURE,
-		.revision = JAILHOUSE_CONFIG_REVISION,
-		.architecture = JAILHOUSE_X86,
-		.flags = JAILHOUSE_SYS_VIRTUAL_DEBUG_CONSOLE,
-		.hypervisor_memory = {
-			.phys_start = 0x3a000000,
-			.size = 0x600000,
-		},
-		.debug_console = {
-			.address = 0x3f8,
-			/* .divider = 0x1, */
-			.type = JAILHOUSE_CON_TYPE_8250,
-			.flags = JAILHOUSE_CON_ACCESS_PIO,
-		},
-		.platform_info = {
-			.pci_mmconfig_base = 0xe0000000,
-			.pci_mmconfig_end_bus = 0xff,
-			.x86 = {
-				.pm_timer_address = 0x808,
-			},
-		},
-		.root_cell = {
-			.name = "IMB-A180",
-			.cpu_set_size = sizeof(config.cpus),
-			.num_memory_regions = ARRAY_SIZE(config.mem_regions),
-			.num_irqchips = ARRAY_SIZE(config.irqchips),
-			.num_pio_regions = ARRAY_SIZE(config.pio_regions),
-			.num_pci_devices = ARRAY_SIZE(config.pci_devices),
-			.num_pci_caps = ARRAY_SIZE(config.pci_caps),
-		},
-	},
->>>>>>> master
 
     .cpus = {
         0x000000000000000f,

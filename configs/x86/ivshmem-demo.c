@@ -16,7 +16,6 @@
 #include <jailhouse/types.h>
 #include <jailhouse/cell-config.h>
 
-<<<<<<< HEAD
 struct
 {
     struct jailhouse_cell_desc cell;
@@ -33,23 +32,6 @@ struct
         .name = "ivshmem-demo",
         .flags = JAILHOUSE_CELL_PASSIVE_COMMREG |
         JAILHOUSE_CELL_VIRTUAL_CONSOLE_PERMITTED,
-=======
-struct {
-	struct jailhouse_cell_desc cell;
-	__u64 cpus[1];
-	struct jailhouse_memory mem_regions[7];
-	struct jailhouse_pio pio_regions[2];
-	struct jailhouse_pci_device pci_devices[1];
-	struct jailhouse_pci_capability pci_caps[0];
-} __attribute__((packed)) config = {
-	.cell = {
-		.signature = JAILHOUSE_CELL_DESC_SIGNATURE,
-		.revision = JAILHOUSE_CONFIG_REVISION,
-		.architecture = JAILHOUSE_X86,
-		.name = "ivshmem-demo",
-		.flags = JAILHOUSE_CELL_PASSIVE_COMMREG |
-			JAILHOUSE_CELL_VIRTUAL_CONSOLE_PERMITTED,
->>>>>>> master
 
         .cpu_set_size = sizeof(config.cpus),
         .num_memory_regions = ARRAY_SIZE(config.mem_regions),
@@ -123,7 +105,6 @@ struct {
         PIO_RANGE(0x3f8, 8), /* serial 1 */
     },
 
-<<<<<<< HEAD
     .pci_devices = {
         {
             .type = JAILHOUSE_PCI_TYPE_IVSHMEM,
@@ -137,19 +118,4 @@ struct {
                         .shmem_protocol = JAILHOUSE_SHMEM_PROTO_UNDEFINED,
         },
     },
-=======
-	.pci_devices = {
-		{
-			.type = JAILHOUSE_PCI_TYPE_IVSHMEM,
-			.domain = 0x0000,
-			.bdf = 0x100 | (0x0e << 3),
-			.bar_mask = JAILHOUSE_IVSHMEM_BAR_MASK_MSIX,
-			.num_msix_vectors = 16,
-			.shmem_regions_start = 0,
-			.shmem_dev_id = 1,
-			.shmem_peers = 3,
-			.shmem_protocol = JAILHOUSE_SHMEM_PROTO_UNDEFINED,
-		},
-	},
->>>>>>> master
 };

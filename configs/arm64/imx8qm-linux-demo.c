@@ -13,7 +13,6 @@
 #include <jailhouse/types.h>
 #include <jailhouse/cell-config.h>
 
-<<<<<<< HEAD
 struct
 {
     struct jailhouse_cell_desc cell;
@@ -29,22 +28,6 @@ struct
         .revision = JAILHOUSE_CONFIG_REVISION,
         .name = "imx8qm-linux-demo",
         .flags = JAILHOUSE_CELL_PASSIVE_COMMREG,
-=======
-struct {
-	struct jailhouse_cell_desc cell;
-	__u64 cpus[1];
-	struct jailhouse_memory mem_regions[18];
-	struct jailhouse_irqchip irqchips[4];
-	struct jailhouse_pci_device pci_devices[2];
-	union jailhouse_stream_id stream_ids[1];
-} __attribute__((packed)) config = {
-	.cell = {
-		.signature = JAILHOUSE_CELL_DESC_SIGNATURE,
-		.revision = JAILHOUSE_CONFIG_REVISION,
-		.architecture = JAILHOUSE_ARM64,
-		.name = "imx8qm-linux-demo",
-		.flags = JAILHOUSE_CELL_PASSIVE_COMMREG,
->>>>>>> master
 
         .cpu_set_size = sizeof(config.cpus),
         .num_memory_regions = ARRAY_SIZE(config.mem_regions),

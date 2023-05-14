@@ -40,7 +40,6 @@
 #define _JAILHOUSE_CONSOLE_H
 
 /* Those definitions are used for the type in struct jailhouse_console */
-<<<<<<< HEAD
 #define JAILHOUSE_CON_TYPE_NONE     0x0000
 #define JAILHOUSE_CON_TYPE_EFIFB    0x0001
 #define JAILHOUSE_CON_TYPE_8250     0x0002
@@ -51,19 +50,6 @@
 #define JAILHOUSE_CON_TYPE_SCIFA    0x0007
 #define JAILHOUSE_CON_TYPE_IMX      0x0008
 #define JAILHOUSE_CON_TYPE_IMX_LPUART   0x0009
-=======
-#define JAILHOUSE_CON_TYPE_NONE		0x0000
-#define JAILHOUSE_CON_TYPE_EFIFB	0x0001
-#define JAILHOUSE_CON_TYPE_8250		0x0002
-#define JAILHOUSE_CON_TYPE_PL011	0x0003
-#define JAILHOUSE_CON_TYPE_XUARTPS	0x0004
-#define JAILHOUSE_CON_TYPE_MVEBU	0x0005
-#define JAILHOUSE_CON_TYPE_HSCIF	0x0006
-#define JAILHOUSE_CON_TYPE_SCIFA	0x0007
-#define JAILHOUSE_CON_TYPE_IMX		0x0008
-#define JAILHOUSE_CON_TYPE_IMX_LPUART	0x0009
-#define JAILHOUSE_CON_TYPE_SCIF		0x000a
->>>>>>> master
 
 /* Flags: bit 0 is used to select PIO (cleared) or MMIO (set) access */
 #define JAILHOUSE_CON_ACCESS_PIO    0x0000

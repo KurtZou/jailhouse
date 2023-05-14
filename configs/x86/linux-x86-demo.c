@@ -32,7 +32,6 @@ struct
 #else
     struct jailhouse_pci_device pci_devices[4];
 #endif
-<<<<<<< HEAD
     struct jailhouse_pci_capability pci_caps[6];
 } __attribute__((packed)) config =
 {
@@ -42,17 +41,6 @@ struct
         .name = "linux-x86-demo",
         .flags = JAILHOUSE_CELL_PASSIVE_COMMREG |
         JAILHOUSE_CELL_VIRTUAL_CONSOLE_PERMITTED,
-=======
-	struct jailhouse_pci_capability pci_caps[6];
-} __attribute__((packed)) config = {
-	.cell = {
-		.signature = JAILHOUSE_CELL_DESC_SIGNATURE,
-		.revision = JAILHOUSE_CONFIG_REVISION,
-		.architecture = JAILHOUSE_X86,
-		.name = "linux-x86-demo",
-		.flags = JAILHOUSE_CELL_PASSIVE_COMMREG |
-			 JAILHOUSE_CELL_VIRTUAL_CONSOLE_PERMITTED,
->>>>>>> master
 
         .cpu_set_size = sizeof(config.cpus),
         .num_memory_regions = ARRAY_SIZE(config.mem_regions),
@@ -158,7 +146,6 @@ struct
             JAILHOUSE_MEM_LOADABLE,
         },
 #ifdef CONFIG_QEMU_E1000E_ASSIGNMENT
-<<<<<<< HEAD
         /* MemRegion: feb40000-feb7ffff : 0000:00:02.0 */
         {
             .phys_start = 0xfeb40000,
@@ -187,36 +174,6 @@ struct
             .size = 0x3000,
             .flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE,
         },
-=======
-		/* MemRegion: fea00000-fea3ffff : 0000:00:02.0 */
-		{
-			.phys_start = 0xfea00000,
-			.virt_start = 0xfea00000,
-			.size = 0x40000,
-			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE,
-		},
-		/* MemRegion: fea40000-fea5ffff : e1000e */
-		{
-			.phys_start = 0xfea40000,
-			.virt_start = 0xfea40000,
-			.size = 0x20000,
-			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE,
-		},
-		/* MemRegion: fea60000-fea7ffff : e1000e */
-		{
-			.phys_start = 0xfea60000,
-			.virt_start = 0xfea60000,
-			.size = 0x20000,
-			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE,
-		},
-		/* MemRegion: fea91000-fea93fff : e1000e */
-		{
-			.phys_start = 0xfea91000,
-			.virt_start = 0xfea91000,
-			.size = 0x3000,
-			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE,
-		},
->>>>>>> master
 #endif
     },
 
@@ -244,7 +201,6 @@ struct
         PIO_RANGE(0xe010, 8), /* OXPCIe952 serial1 */
     },
 
-<<<<<<< HEAD
     .pci_devices = {
         {
             .type = JAILHOUSE_PCI_TYPE_IVSHMEM,
@@ -309,72 +265,6 @@ struct
             .msix_region_size = 0x1000,
             .msix_address = 0xfebd0000,
         },
-=======
-	.pci_devices = {
-		{
-			.type = JAILHOUSE_PCI_TYPE_IVSHMEM,
-			.domain = 0x0,
-			.bdf = 0x100 | (0x0c << 3),
-			.bar_mask = JAILHOUSE_IVSHMEM_BAR_MASK_MSIX,
-			.num_msix_vectors = 2,
-			.shmem_regions_start = 0,
-			.shmem_dev_id = 1,
-			.shmem_peers = 2,
-			.shmem_protocol = JAILHOUSE_SHMEM_PROTO_VIRTIO_FRONT +
-				VIRTIO_DEV_BLOCK,
-		},
-		{
-			.type = JAILHOUSE_PCI_TYPE_IVSHMEM,
-			.domain = 0x0,
-			.bdf = 0x100 | (0x0d << 3),
-			.bar_mask = JAILHOUSE_IVSHMEM_BAR_MASK_MSIX,
-			.num_msix_vectors = 3,
-			.shmem_regions_start = 4,
-			.shmem_dev_id = 1,
-			.shmem_peers = 2,
-			.shmem_protocol = JAILHOUSE_SHMEM_PROTO_VIRTIO_FRONT +
-				VIRTIO_DEV_CONSOLE,
-		},
-		{
-			.type = JAILHOUSE_PCI_TYPE_IVSHMEM,
-			.domain = 0x0,
-			.bdf = 0x100 | (0x0e << 3),
-			.bar_mask = JAILHOUSE_IVSHMEM_BAR_MASK_MSIX,
-			.num_msix_vectors = 16,
-			.shmem_regions_start = 8,
-			.shmem_dev_id = 2,
-			.shmem_peers = 3,
-			.shmem_protocol = JAILHOUSE_SHMEM_PROTO_UNDEFINED,
-		},
-		{
-			.type = JAILHOUSE_PCI_TYPE_IVSHMEM,
-			.domain = 0x0,
-			.bdf = 0x100 | (0x0f << 3),
-			.bar_mask = JAILHOUSE_IVSHMEM_BAR_MASK_MSIX,
-			.num_msix_vectors = 2,
-			.shmem_regions_start = 13,
-			.shmem_dev_id = 1,
-			.shmem_peers = 2,
-			.shmem_protocol = JAILHOUSE_SHMEM_PROTO_VETH,
-		},
-#ifdef CONFIG_QEMU_E1000E_ASSIGNMENT
-		{ /* e1000e */
-			.type = JAILHOUSE_PCI_TYPE_DEVICE,
-			.domain = 0x0000,
-			.bdf = 0x0010,
-			.bar_mask = {
-				0xfffe0000, 0xfffe0000, 0xffffffe0,
-				0xffffc000, 0x00000000, 0x00000000,
-			},
-			.caps_start = 0,
-			.num_caps = 6,
-			.num_msi_vectors = 1,
-			.msi_64bits = 1,
-			.num_msix_vectors = 5,
-			.msix_region_size = 0x1000,
-			.msix_address = 0xfea90000,
-		},
->>>>>>> master
 #endif
     },
 

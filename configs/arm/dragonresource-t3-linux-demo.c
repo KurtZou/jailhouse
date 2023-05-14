@@ -29,7 +29,8 @@ struct
         .signature = JAILHOUSE_CELL_DESC_SIGNATURE,
         .revision = JAILHOUSE_CONFIG_REVISION,
         .name = "dragonresource-t3-linux-demo",
-        .flags = JAILHOUSE_CELL_PASSIVE_COMMREG,
+        .flags = JAILHOUSE_CELL_PASSIVE_COMMREG |
+        JAILHOUSE_CELL_VIRTUAL_CONSOLE_PERMITTED,
 
         .cpu_set_size = sizeof(config.cpus),
         .num_memory_regions = ARRAY_SIZE(config.mem_regions),
@@ -39,12 +40,7 @@ struct
         .vpci_irq_base = 123,
 
         .console = {
-            .address = 0x01c29000,
-#if 1
-            .clock_reg = 0x01c2006c,
-            .gate_nr = 20,
-            .divider = 0x0d,
-#endif
+            .address = 0x01c28000,
             .type = JAILHOUSE_CON_TYPE_8250,
             .flags = JAILHOUSE_CON_ACCESS_MMIO |
             JAILHOUSE_CON_REGDIST_4,
@@ -56,15 +52,6 @@ struct
     },
 
     .mem_regions = {
-#if 1
-        /* CCU */ {
-            .phys_start = 0x01c2006c,
-            .virt_start = 0x01c2006c,
-            .size = 0x4,
-            .flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
-            JAILHOUSE_MEM_IO | JAILHOUSE_MEM_IO_32 | JAILHOUSE_MEM_ROOTSHARED,
-        },
-#endif
         /* IVSHMEM shared memory regions (demo) */
         {
             .phys_start = 0x6f6f0000,
@@ -100,12 +87,12 @@ struct
         },
         /* IVSHMEM shared memory region */
         JAILHOUSE_SHMEM_NET_REGIONS(0x6f700000, 1),
-        /* UART 4 */ {
-            .phys_start = 0x01c29000,
-            .virt_start = 0x01c29000,
-            .size = 0x400,
+        /* UART 0-3 */ {
+            .phys_start = 0x01c28000,
+            .virt_start = 0x01c28000,
+            .size = 0x1000,
             .flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
-            JAILHOUSE_MEM_IO | JAILHOUSE_MEM_IO_32,
+            JAILHOUSE_MEM_IO | JAILHOUSE_MEM_ROOTSHARED,
         },
         /* RAM */ {
             .phys_start = 0x6f610000,
@@ -135,10 +122,10 @@ struct
             .address = 0x01c81000,
             .pin_base = 32,
             .pin_bitmap = {
-                1 << (49-32),
+                1 << (32-32),
                   0,
                   0,
-                  (1 << (156-128)),
+                  (1 << (155-128)) | (1 << (156-128)),
             },
         },
     },

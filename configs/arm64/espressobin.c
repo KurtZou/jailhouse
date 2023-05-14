@@ -17,7 +17,6 @@
 #include <jailhouse/types.h>
 #include <jailhouse/cell-config.h>
 
-<<<<<<< HEAD
 struct
 {
     struct jailhouse_system header;
@@ -56,45 +55,6 @@ struct
         },
         .root_cell = {
             .name = "ESPRESSObin",
-=======
-struct {
-	struct jailhouse_system header;
-	__u64 cpus[1];
-	struct jailhouse_memory mem_regions[7];
-	struct jailhouse_irqchip irqchips[1];
-	struct jailhouse_pci_device pci_devices[1];
-} __attribute__((packed)) config = {
-	.header = {
-		.signature = JAILHOUSE_SYSTEM_SIGNATURE,
-		.revision = JAILHOUSE_CONFIG_REVISION,
-		.architecture = JAILHOUSE_ARM64,
-		.flags = JAILHOUSE_SYS_VIRTUAL_DEBUG_CONSOLE,
-		.hypervisor_memory = {
-			.phys_start = 0x3fc00000,
-			.size =       0x00400000,
-		},
-		.debug_console = {
-			.address = 0xd0012000,
-			.size = 0x1000,
-			.type = JAILHOUSE_CON_TYPE_MVEBU,
-			.flags = JAILHOUSE_CON_ACCESS_MMIO |
-				 JAILHOUSE_CON_REGDIST_4,
-		},
-		.platform_info = {
-			.pci_mmconfig_base = 0xfc000000,
-			.pci_mmconfig_end_bus = 0,
-			.pci_is_virtual = 1,
-			.pci_domain = 1,
-			.arm = {
-				.gic_version = 3,
-				.gicd_base = 0xd1d00000,
-				.gicr_base = 0xd1d40000,
-				.maintenance_irq = 25,
-			},
-		},
-		.root_cell = {
-			.name = "ESPRESSObin",
->>>>>>> master
 
             .cpu_set_size = sizeof(config.cpus),
             .num_memory_regions = ARRAY_SIZE(config.mem_regions),

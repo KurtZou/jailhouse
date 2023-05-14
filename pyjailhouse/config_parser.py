@@ -19,22 +19,7 @@ import struct
 from .extendedenum import ExtendedEnum
 
 # Keep the whole file in sync with include/jailhouse/cell-config.h.
-_CONFIG_REVISION = 14
-JAILHOUSE_X86 = 0
-JAILHOUSE_ARM = 1
-JAILHOUSE_ARM64 = 2
-
-JAILHOUSE_ARCH_MAX = 2
-
-
-def convert_arch(arch):
-    if arch > JAILHOUSE_ARCH_MAX:
-        raise RuntimeError('Configuration has unsupported architecture')
-    return {
-        JAILHOUSE_X86: 'x86',
-        JAILHOUSE_ARM: 'arm',
-        JAILHOUSE_ARM64: 'arm64',
-    }[arch]
+_CONFIG_REVISION = 13
 
 
 def flag_str(enum_class, value, separator=' | '):
@@ -150,14 +135,13 @@ class PIORegion:
 
 
 class CellConfig:
-    _HEADER_FORMAT = '=5sBH32s4xIIIIIIIIIIQ8x32x'
+    _HEADER_FORMAT = '=6sH32s4xIIIIIIIIIIQ8x32x'
 
     def __init__(self, data, root_cell=False):
         self.data = data
 
         try:
             (signature,
-             self.arch,
              revision,
              name,
              self.flags,
@@ -173,12 +157,11 @@ class CellConfig:
              self.cpu_reset_address) = \
                 struct.unpack_from(CellConfig._HEADER_FORMAT, self.data)
             if not root_cell:
-                if signature != b'JHCLL':
+                if signature != b'JHCELL':
                     raise RuntimeError('Not a cell configuration')
                 if revision != _CONFIG_REVISION:
                     raise RuntimeError('Configuration file revision mismatch')
             self.name = str(name.decode().strip('\0'))
-            self.arch = convert_arch(self.arch)
 
             mem_region_offs = struct.calcsize(CellConfig._HEADER_FORMAT) + \
                 self.cpu_set_size
@@ -250,7 +233,7 @@ class IOMMU:
 
 
 class SystemConfig:
-    _HEADER_FORMAT = '=5sBH4x'
+    _HEADER_FORMAT = '=6sH4x'
     # ...followed by MemRegion as hypervisor memory
     _CONSOLE_FORMAT = '32x'
     _PCI_FORMAT = '=QBBH'
@@ -258,18 +241,18 @@ class SystemConfig:
     _ARCH_ARM_FORMAT = '=BB2xQQQQQ'
     _ARCH_X86_FORMAT = '=HBxIII28x'
 
-    def __init__(self, data):
+    def __init__(self, data, arch):
         self.data = data
 
         try:
-            (signature, self.arch, revision) = \
+            (signature,
+             revision) = \
                 struct.unpack_from(self._HEADER_FORMAT, self.data)
 
-            if signature != b'JHSYS':
+            if signature != b'JHSYST':
                 raise RuntimeError('Not a root cell configuration')
             if revision != _CONFIG_REVISION:
                 raise RuntimeError('Configuration file revision mismatch')
-            self.arch = convert_arch(self.arch)
 
             offs = struct.calcsize(self._HEADER_FORMAT)
             self.hypervisor_memory = MemRegion(self.data[offs:])
@@ -290,7 +273,7 @@ class SystemConfig:
                     self.iommus.append(iommu)
                 offs += IOMMU.SIZE
 
-            if self.arch in ('arm', 'arm64'):
+            if arch in ('arm', 'arm64'):
                 (self.arm_maintenance_irq,
                  self.arm_gic_version,
                  self.arm_gicd_base,
@@ -299,7 +282,7 @@ class SystemConfig:
                  self.arm_gicv_base,
                  self.arm_gicr_base) = \
                      struct.unpack_from(self._ARCH_ARM_FORMAT, self.data[offs:])
-            elif self.arch == 'x86':
+            elif arch == 'x86':
                 (self.x86_pm_timer_address,
                  self.x86_apic_mode,
                  self.x86_vtd_interrupt_limit,
