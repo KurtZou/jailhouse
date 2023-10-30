@@ -20,7 +20,7 @@ struct
 {
     struct jailhouse_cell_desc cell;
     __u64 cpus[1];
-    struct jailhouse_memory mem_regions[12];
+    struct jailhouse_memory mem_regions[11];
     struct jailhouse_irqchip irqchips[1];
     struct jailhouse_pci_device pci_devices[1];
 } __attribute__((packed)) config =
@@ -28,7 +28,7 @@ struct
     .cell = {
         .signature = JAILHOUSE_CELL_DESC_SIGNATURE,
         .revision = JAILHOUSE_CONFIG_REVISION,
-        .name = "dragonresource-t3-freertos-demo",
+        .name = "dragonresource-t3-rtos2",
         .flags = JAILHOUSE_CELL_PASSIVE_COMMREG,
 
         .cpu_set_size = sizeof(config.cpus),
@@ -36,8 +36,14 @@ struct
         .num_irqchips = ARRAY_SIZE(config.irqchips),
         .num_pci_devices = ARRAY_SIZE(config.pci_devices),
 
-        .vpci_irq_base = 123,
+        .vpci_irq_base = 127,
 
+        .console = {
+            .address = 0x01c28000,
+            .type = JAILHOUSE_CON_TYPE_8250,
+            .flags = JAILHOUSE_CON_ACCESS_MMIO |
+            JAILHOUSE_CON_REGDIST_4,
+        },
     },
 
     .cpus = {
@@ -45,7 +51,7 @@ struct
     },
 
     .mem_regions = {
-#if 1
+#if 0
         /* CCU */ {
             .phys_start = 0x01c20000,
             .virt_start = 0x01c20000,
@@ -83,13 +89,14 @@ struct
             .phys_start = 0x6f6fa000,
             .virt_start = 0x6f6fa000,
             .size = 0x2000,
-            .flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_ROOTSHARED,
+            .flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE | JAILHOUSE_MEM_ROOTSHARED,
         },
         {
             .phys_start = 0x6f6fc000,
             .virt_start = 0x6f6fc000,
             .size = 0x2000,
-            .flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_ROOTSHARED | JAILHOUSE_MEM_WRITE,
+            .flags = JAILHOUSE_MEM_READ | 
+            JAILHOUSE_MEM_ROOTSHARED,
         },
         {
             .phys_start = 0x6f6fe000,
@@ -104,7 +111,7 @@ struct
             .flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
             JAILHOUSE_MEM_IO | JAILHOUSE_MEM_IO_32,
         },
-#if 0
+#if 1
         /* UART 0-3 */ {
             .phys_start = 0x01c28000,
             .virt_start = 0x01c28000,
@@ -112,7 +119,7 @@ struct
             .flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
             JAILHOUSE_MEM_IO | JAILHOUSE_MEM_ROOTSHARED,
         },
-#endif
+#else
         /* UART 4 */ {
             .phys_start = 0x01c29000,
             .virt_start = 0x01c29000,
@@ -120,10 +127,11 @@ struct
             .flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
             JAILHOUSE_MEM_IO,
         },
+#endif
         /* RAM */ {
-            .phys_start = 0x6e000000,
+            .phys_start = 0x6f610000,
             .virt_start = 0,
-            .size = 0x01000000,   // 16M
+            .size = 0x00010000,
             .flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
             JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_LOADABLE,
         },
@@ -139,13 +147,16 @@ struct
         /* GIC */ {
             .address = 0x01c81000,
             .pin_base = 32,
-            /* Interrupt of UART 4 belongs to the client */
             .pin_bitmap = {
-                1<<(49-32), 0, 0, 1 << (123+32-128),
+                0,
+                0,
+                0,
+                1 << (159-128),
             },
         },
     },
 
+#if 0
     .pci_devices = {
         {
             .type = JAILHOUSE_PCI_TYPE_IVSHMEM,
@@ -157,4 +168,5 @@ struct
                      .shmem_protocol = JAILHOUSE_SHMEM_PROTO_UNDEFINED,
         },
     },
+#endif
 };
